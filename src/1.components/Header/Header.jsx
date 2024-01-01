@@ -3,8 +3,8 @@ import { Icon } from '@iconify/react';
 
 function Header() {
     return (
-        <div className='w-full z-99 top-0 border-b fixed px-4 py-1 flex justify-between items-center bg-white '>
-
+        <div className=' w-full z-99 top-0 border-b fixed px-4 py-1 flex justify-between 
+        items-center bg-white '>
             {/* left side */}
             <div className=' flex items-center  h-14'>
                 <div className='hoverStyle1 rounded-full p-3'>
