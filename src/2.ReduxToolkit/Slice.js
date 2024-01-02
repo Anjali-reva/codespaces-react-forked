@@ -1,8 +1,7 @@
-import { createSlice, nanoid } from '@reduxjs/toolkit'
+import { createSlice, nanoid } from '@reduxjs/toolkit';
 
 const initialState = {
-    clickValue: [{ id: 1, text: 'firstTest' }],
-    // todos: [{id: 1, text: "Hello world"}]
+    clickValue: [{ id: 1, Text: 'firstTest' }],
 }
 
 export const notesSlice = createSlice({
@@ -11,11 +10,11 @@ export const notesSlice = createSlice({
     reducers: {
         updateClickValue: (state, action) => {
             const note = { id: nanoid(), Text: action.payload }
-            state.clickValue.push(note)
+            state.clickValue.push(note);
         }
     }
-})
+});
 
-export const { updateClickValue } = notesSlice.actions
+export const { updateClickValue } = notesSlice.actions;
 
-export default notesSlice.reducer
+export default notesSlice.reducer;
