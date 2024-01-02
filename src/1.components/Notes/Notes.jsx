@@ -7,7 +7,7 @@ function Notes() {
 
     const [list, setList] = useState([])
 
-    const value = useSelector((state) => state.clickToShow.clickValue)
+    const value = useSelector(state => state.clickToShow.clickValue)
 
     console.log('this is from value:', value);
 
@@ -24,7 +24,11 @@ function Notes() {
             <div className='w-full h-32 my-6 border border-black flex flex-col items-center   '>
                 <button onClick={add}>add</button>
                 <ul>
-                    {list.map((each) => { <li key={each.id}><p>{each.text}</p></li> })}
+                    {list.map((each) => {
+                        return (
+                            <li key={each.id}><p>{each.text}</p></li>
+                        )
+                    })}
                 </ul>
 
             </div>

@@ -1,7 +1,7 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit'
 
 const initialState = {
-    clickValue: [{ id: 1, text: 'firstTest' },],
+    clickValue: [{ id: 1, text: 'firstTest' }],
     // todos: [{id: 1, text: "Hello world"}]
 }
 
