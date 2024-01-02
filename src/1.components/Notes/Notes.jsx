@@ -17,24 +17,21 @@ function Notes() {
     const add = () => {
         setList([...list, value])
     }
-    return (
-
-        <div className='w-[calc(100%-4rem)] ml-16  mt-24'>
+   return (
+        <div className='w-[calc(100%-4rem)] ml-16 mt-24'>
             <CreateNotes />
-            <div className='w-full h-32 my-6 border border-black flex flex-col items-center   '>
-                <button onClick={add}>add</button>
+            <div className='w-full h-32 my-6 border border-black flex flex-col items-center'>
                 <ul>
-                    {list.map((each) => {
-                        return (
-                            <li key={each.id}><p>{each.text}</p></li>
-                        )
-                    })}
+                    <li>test li</li>
+                    {value &&
+                        value.map(each => (
+                            <li key={each.id}>{each.Text}</li>
+                        ))}
+                    <li>test last</li>
                 </ul>
-
             </div>
-
         </div>
-    )
+    );
 }
 
 export default Notes
