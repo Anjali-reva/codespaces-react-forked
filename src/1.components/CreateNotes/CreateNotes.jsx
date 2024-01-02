@@ -1,23 +1,32 @@
-import React, { useState } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
 import { useDispatch } from 'react-redux';
 import { updateClickValue } from '../../2.ReduxToolkit/Slice';
 
 
-function CreateNotes() {
+function CreateNotes (props) {
 
     const dispatch = useDispatch()
     const [onFocus, setOnFocus] = useState('')
     const [input1Value, setInput1Value] = useState('')
+    const [input2Value, setInput2Value] = useState('')
 
     const submit = (e) => {
         e.preventDefault()
         dispatch(updateClickValue(input1Value))
-        // setInput1Value('')
+        setInput1Value('')
     }
 
     return (
-        <div onClick={(e) => { e.target.id == 'input1' || e.target.id == 'input2' ? setOnFocus(true) : setOnFocus(false) }} id='CreateNotes'
+        <div
+            id='CreateNotes'
+            onClick={(e) => {
+                if (e.target.id == 'input1' || e.target.id == 'input2') {
+                    setOnFocus(true)
+                } else {
+                    setOnFocus(false)
+                }
+            }}
             className=' bg-white  w-full  '>
             <form onSubmit={submit}>
                 <div className={`rounded-xl shadow-md border  justify-center 
