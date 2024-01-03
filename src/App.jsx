@@ -5,14 +5,13 @@ import LeftSideBar from './1.components/sidebaar/LeftSideBar';
 import { store } from './2.ReduxToolkit/Store';
 import { Provider } from 'react-redux';
 
-
 function App() {
   return (
     <Provider store={store}>
       <div className='relative '>
-        <LeftSideBar />
-        <Header />
-        <Notes />
+         <LeftSideBar/>
+         <Header />
+         <Notes /> 
       </div>
     </Provider >
   );

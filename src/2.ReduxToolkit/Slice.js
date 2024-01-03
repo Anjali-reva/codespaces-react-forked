@@ -1,7 +1,7 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit';
 
 const initialState = {
-    clickValue: [{ id: 1, Text: 'firstTest'}],
+    clickValue: [{ id: 1, Text: 'A book writen by Collen Hoover. this is very romentic book.'}],
 }
 
 export const notesSlice = createSlice({
