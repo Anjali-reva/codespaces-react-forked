@@ -1,20 +1,28 @@
 import React, { forwardRef, useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
-import { useDispatch } from 'react-redux';
-import { updateClickValue } from '../../2.ReduxToolkit/Slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateClickValue, updateTitle } from '../../2.ReduxToolkit/Slice';
 
 
-function CreateNotes (props) {
 
+function CreateNotes(props) {
+
+    const value = useSelector((state) => state.clickToShow.clickValue)
     const dispatch = useDispatch()
     const [onFocus, setOnFocus] = useState('')
     const [input1Value, setInput1Value] = useState('')
     const [input2Value, setInput2Value] = useState('')
 
+
     const submit = (e) => {
         e.preventDefault()
-        dispatch(updateClickValue(input1Value))
-        setInput1Value('')
+        dispatch(updateTitle(input1Value))
+        dispatch(updateTitle(input1Value))
+        dispatch(updateClickValue(input2Value))
+        if(input1Value) setInput1Value('')
+        if(input2Value) setInput2Value('')
+        console.log(value)
+        // console.log(input2Value)
     }
 
     return (
@@ -47,7 +55,13 @@ function CreateNotes (props) {
                     />
 
                     <div className={`${onFocus == true ? 'block' : 'hidden'} `}>
-                        <input type="text" id='input2' placeholder='Take a note...' className='my-4 font-sans overflow-auto placeholder:text-gray-600 outline-none w-full' />
+                        <input
+                            type="text"
+                            id='input2'
+                            value={input2Value}
+                            onChange={e => setInput2Value(e.target.value)}
+                            placeholder='Take a note...'
+                            className='my-4 font-sans overflow-auto placeholder:text-gray-600 outline-none w-full' />
                         <div className='flex items-center'>
                             <div className='mr-7'>
                                 <Icon icon="bx:bell-plus" color='#4a5568' height={18} />
@@ -67,7 +81,9 @@ function CreateNotes (props) {
                             <div className=' w-[100%] flex justify-end'>
                                 <button
                                     type='submit'
-                                    className='bg-white font-semibold hover:bg-gray-100 rounded-md text-[#4a5568] px-2 '>Close</button>
+                                    className='bg-white font-semibold hover:bg-gray-100 rounded-md text-[#4a5568] px-2 '>
+                                    Close
+                                </button>
                             </div>
 
                         </div>
