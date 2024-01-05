@@ -1,7 +1,8 @@
 import React, { forwardRef, useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateClickValue, updateTitle } from '../../2.ReduxToolkit/Slice';
+import { updateClickValue, updateTitle, updateBoth } from '../../2.ReduxToolkit/Slice';
+import { nanoid } from '@reduxjs/toolkit';
 
 
 
@@ -13,16 +14,18 @@ function CreateNotes(props) {
     const [input1Value, setInput1Value] = useState('')
     const [input2Value, setInput2Value] = useState('')
 
-
     const submit = (e) => {
         e.preventDefault()
-        dispatch(updateTitle(input1Value))
-        dispatch(updateTitle(input1Value))
-        dispatch(updateClickValue(input2Value))
-        if(input1Value) setInput1Value('')
-        if(input2Value) setInput2Value('')
-        console.log(value)
-        // console.log(input2Value)
+        // dispatch(updateTitle(input1Value,))
+        // dispatch(updateClickValue(input2Value))
+        const note2 = {
+            id: nanoid(),
+            Title: input1Value,
+            Text: input2Value,
+        }
+        dispatch(updateBoth(updateBoth(note2)))
+        if (input1Value) setInput1Value('')
+        if (input2Value) setInput2Value('')
     }
 
     return (

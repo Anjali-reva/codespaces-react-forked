@@ -11,7 +11,7 @@ function App() {
       <div className='relative '>
          <LeftSideBar/>
          <Header />
-         <Notes />  
+         <Notes /> 
       </div>
     </Provider >
   );
