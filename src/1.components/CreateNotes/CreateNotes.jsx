@@ -1,7 +1,7 @@
 import React, { forwardRef, useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateClickValue, updateTitle, updateBoth } from '../../2.ReduxToolkit/Slice';
+import { updateBoth } from '../../2.ReduxToolkit/Slice';
 import { nanoid } from '@reduxjs/toolkit';
 
 
@@ -16,8 +16,6 @@ function CreateNotes(props) {
 
     const submit = (e) => {
         e.preventDefault()
-        // dispatch(updateTitle(input1Value,))
-        // dispatch(updateClickValue(input2Value))
         const note2 = {
             id: nanoid(),
             Title: input1Value,
@@ -43,8 +41,7 @@ function CreateNotes(props) {
                 <div className={`rounded-xl shadow-md border  justify-center 
                     sm:w-[75%] sm:m-auto
                     lg:w-[45%] lg:m-auto
-                    // xl:w-[45%] xl:m-auto
-                    w-[calc(100%-5rem)] ml-[4rem] mr-4
+                    w-[calc(100%-5rem)] ml-[2.8rem] mr-4
                     px-4 py-3
                 `}>
                     <input
@@ -65,8 +62,11 @@ function CreateNotes(props) {
                             onChange={e => setInput2Value(e.target.value)}
                             placeholder='Take a note...'
                             className='my-4 font-sans overflow-auto placeholder:text-gray-600 outline-none w-full' />
-                        <div className='flex items-center'>
-                            <div className='mr-7'>
+                        <div className='flex items-center'
+                            data-tooltip="Remind me" data-tooltip-location="bottom"
+                        >
+                            <div className='mr-7 hover:bg-gray-500'
+                            >
                                 <Icon icon="bx:bell-plus" color='#4a5568' height={18} />
                             </div>
                             <div className='mr-7'>
