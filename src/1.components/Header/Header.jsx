@@ -1,5 +1,6 @@
 import React from 'react'
 import { Icon } from '@iconify/react';
+import TooltipItem from "../SupportingComponents/Tooltip";
 
 function Header() {
     return (
@@ -7,8 +8,10 @@ function Header() {
         items-center bg-white '>
             {/* left side */}
             <div className=' flex items-center  h-14'>
-                <div className='hoverStyle1 rounded-full p-3'>
-                    <Icon icon="mdi:menu" color='#4a5568' width={24} />
+                <div className='rounded-full p-1'>
+                    <TooltipItem position="bottom" tooltipsText="Main menu">
+                        <Icon icon="mdi:menu" color='#4a5568' width={24} />
+                    </TooltipItem>
                 </div>
                 <div className='mx-5'>
                     <Icon icon="emojione-v1:note-pad" width={49} />
@@ -33,25 +36,38 @@ function Header() {
             {/* Right */}
             <div>
                 <div className='flex items-center '>
-                    <div className='px-2 py-2 sm:px-2 sm:py-2 rounded-full hoverStyle1'
-                        data-tooltip="Refresh" data-tooltip-location="bottom"
-                    >
-                        <Icon icon="heroicons-solid:refresh" color='#4a5568' width={25} />
+
+                    <div className='px-2 py-2 sm:px-2 sm:py-2 rounded-full'>
+                        <TooltipItem position="bottom" tooltipsText="Refresh">
+                            <Icon icon="heroicons-solid:refresh" color='#4a5568' width={25} />
+                        </TooltipItem>
                     </div>
-                    <div className='px-2 py-2  rounded-full hidden sm:block hoverStyle1'
-                        data-tooltip="List View" data-tooltip-location="bottom"
-                    >
-                        <Icon icon="fa-solid:list" color='#4a5568' width={25} />
+
+                    <div className='px-2 py-2  rounded-full hidden sm:block '>
+                        <TooltipItem position="bottom" tooltipsText="List view">
+                            <Icon icon="fa-solid:list" color='#4a5568' width={25} />
+                        </TooltipItem>
                     </div>
-                    <div className='px-2 py-2  rounded-full hoverStyle1'
-                        data-tooltip="Setting" data-tooltip-location="bottom"
-                    >
-                        <Icon icon="ant-design:setting-filled" color='#4a5568' width={25} />
+
+                    <div className='px-2 py-2  rounded-full '>
+                        <TooltipItem position="bottom" tooltipsText="Settings">
+                            <Icon icon="ant-design:setting-filled" color='#4a5568' width={25} />
+                        </TooltipItem>
                     </div>
-                    <div className=' m-1 sm:ml-10 rounded-full flex items-center justify-center h-10 w-10 bg-orange-500'
-                        data-tooltip="Account" data-tooltip-location="bottom"
-                    >
-                        <p className='font-mono text-xl text-white'>S</p>
+
+                    <div className=' m-1 sm:ml-10 rounded-full flex items-center justify-center h-10 w-10 bg-orange-500'>
+                        <TooltipItem
+                            position="bottom"
+                            tooltipsText={
+                                <div>
+                                    <p className='font-semibold'>Account</p>
+                                    <p>Martin Garrix</p><p>MartinG@outlook.com</p>
+                                </div>
+                            }
+                            customClass={true}
+                            >
+                            <p className='font-mono text-xl text-white'>S</p>
+                        </TooltipItem>
                     </div>
                 </div>
             </div>
