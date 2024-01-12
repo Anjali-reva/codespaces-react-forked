@@ -1,6 +1,7 @@
 import React from 'react'
 import { Icon } from '@iconify/react';
 import TooltipItem from "../SupportingComponents/Tooltip";
+import Logo from './logo/Logo';
 
 function Header() {
     return (
@@ -13,10 +14,10 @@ function Header() {
                         <Icon icon="mdi:menu" color='#4a5568' width={24} />
                     </TooltipItem>
                 </div>
-                <div className='mx-5'>
-                    <Icon icon="emojione-v1:note-pad" width={49} />
+                <div className='ml-10'>
+                    {/* <Icon icon="emojione-v1:note-pad" width={49} /> */}
+                    <Logo width={24}/>
                 </div>
-                <p className='text-gray-700 text-xl font-semibold'>Notes.</p>
             </div>
 
             {/* center */}
@@ -39,23 +40,23 @@ function Header() {
 
                     <div className='px-2 py-2 sm:px-2 sm:py-2 rounded-full'>
                         <TooltipItem position="bottom" tooltipsText="Refresh">
-                            <Icon icon="heroicons-solid:refresh" color='#4a5568' width={25} />
+                        <Icon icon="material-symbols:refresh" color='#4a5568' width={28} />
                         </TooltipItem>
                     </div>
 
                     <div className='px-2 py-2  rounded-full hidden sm:block '>
                         <TooltipItem position="bottom" tooltipsText="List view">
-                            <Icon icon="fa-solid:list" color='#4a5568' width={25} />
+                        <Icon icon="carbon:list-boxes"  color='#4a5568' width={28} />
                         </TooltipItem>
                     </div>
 
                     <div className='px-2 py-2  rounded-full '>
                         <TooltipItem position="bottom" tooltipsText="Settings">
-                            <Icon icon="ant-design:setting-filled" color='#4a5568' width={25} />
+                        <Icon icon="uil:setting" color='#4a5568' width={28} />
                         </TooltipItem>
                     </div>
 
-                    <div className=' m-1 sm:ml-10 rounded-full flex items-center justify-center h-10 w-10 bg-orange-500'>
+                    <div className=' m-1 sm:ml-10 rounded-full flex items-center justify-center h-10 w-10 bg-[#a437db]'>
                         <TooltipItem
                             position="bottom"
                             tooltipsText={
@@ -65,7 +66,7 @@ function Header() {
                                 </div>
                             }
                             customClass={true}
-                            >
+                        >
                             <p className='font-mono text-xl text-white'>S</p>
                         </TooltipItem>
                     </div>

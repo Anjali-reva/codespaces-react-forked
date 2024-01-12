@@ -5,27 +5,23 @@ const initialState = {
     clickValue: [{
         id: 1,
         Title: 'IT ENDS WITH US',
-        Text: 'A book writen by Collen Hoover.this is very romentic book.'
+        Text: 'A book writen by Collen Hoover.this is very romentic book.',
+        color: 'white'
     }],
+
+    // supporting states
     cardValue: [{
         Text: 'card text'
-    }]
-
+    }],
+    color: {
+        color: 'white'
+    }
 }
 
 export const notesSlice = createSlice({
     name: 'clickToShow',
     initialState,
     reducers: {
-        updateClickValue: (state, action) => {
-            const Text = action.payload
-        },
-
-        updateTitle: (state, action) => {
-            // const Title = { Text: action.payload }
-            const Title753 = action.payload
-
-        },
 
         updateBoth: (state, action) => {
             const note = action.payload
@@ -38,10 +34,14 @@ export const notesSlice = createSlice({
                     state.cardValue = note.Text
                 }
             })
+        },
+
+        chooseColor: (state, action) => {
+            state.color = action.payload
         }
     }
 });
 
-export const { updateBoth, showCard } = notesSlice.actions;
+export const { updateBoth, showCard, chooseColor } = notesSlice.actions;
 
 export default notesSlice.reducer;

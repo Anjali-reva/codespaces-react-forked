@@ -1,28 +1,35 @@
 import React, { forwardRef, useEffect, useState, useRef } from 'react'
 import { Icon } from '@iconify/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateBoth } from '../../2.ReduxToolkit/Slice';
+import { updateBoth, chooseColor } from '../../2.ReduxToolkit/Slice';
 import { nanoid } from '@reduxjs/toolkit';
 import TooltipItem from "../SupportingComponents/Tooltip";
+import BackgroundOptions from './BackgroundOptions';
 
 
 function CreateNotes(props) {
 
     const dispatch = useDispatch()
+    const color = useSelector((state)=>state.clickToShow.color)
+
     const [input1Value, setInput1Value] = useState('')
     const [input2Value, setInput2Value] = useState('')
+    const [colorValue, setColorValue] = useState('')
     const [isEditing, setIsEditing] = useState(false);
+    const [bgVisible, setBgVisible] = useState(false)
     const inputRef = useRef();
-
-    // For dispatching all the data and clear iput field
+ 
+    // For dispatching all the data and clear input field
     const submit = (e) => {
         e.preventDefault()
         const note2 = {
             id: nanoid(),
             Title: input1Value,
             Text: input2Value,
+            color: color,
         }
         dispatch(updateBoth(updateBoth(note2)))
+        console.log(color)
         if (input1Value) setInput1Value('')
         if (input2Value) setInput2Value('')
     }
@@ -48,7 +55,7 @@ function CreateNotes(props) {
             id='CreateNotes'
             className=' bg-white  w-full  '>
             <form onSubmit={submit}>
-                <div className={`rounded-xl shadow-md border  justify-center 
+                <div className={`bg-[#f39f76] rounded-xl shadow-md border  justify-center 
                     sm:w-[75%] sm:m-auto
                     lg:w-[45%] lg:m-auto
                     w-[calc(100%-5rem)] ml-[2.8rem] mr-4
@@ -91,10 +98,13 @@ function CreateNotes(props) {
                                             </TooltipItem>
                                         </div>
 
-                                        <div className='mr-7'>
+                                        <div onClick={() => { !bgVisible ? setBgVisible(true) : setBgVisible(false) }} className='mr-7 relative'>
+
+                                            {/* background options */}
                                             <TooltipItem position="bottom" tooltipsText="Background options">
                                                 <Icon icon="tabler:color-filter" color='#4a5568' height={18} />
                                             </TooltipItem>
+                                            <BackgroundOptions bgVisible={bgVisible} />
                                         </div>
 
                                         <div className='mr-7'>

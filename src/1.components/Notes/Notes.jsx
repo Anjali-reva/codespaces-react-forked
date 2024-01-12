@@ -56,8 +56,8 @@ function Notes() {
 
         return () => {
             document.removeEventListener('mousedown', handleOutsideClick)
+            setMouseOver(false)
         }
-        setMouseOver(false)
     }, [])
 
     const mouseOverfn = (condition, each) => {
@@ -73,10 +73,11 @@ function Notes() {
 
     }
 
+
     return (
         <div
             id="NoteDiv"
-            className="w-[calc(100%-4rem)] ml-16 mt-24 "
+            className={`w-[calc(100%-4rem)] h-screen bigdiv ml-16 mt-24 `}
         >
             <CreateNotes />
 
@@ -84,15 +85,14 @@ function Notes() {
                 className={`w-full flex justify-center mt-6 px-10  ${isPopupVisible && 'opacity-20'} `}
             >
                 <div
-                    className=" w-fit columns-1 gap-x-2
+                    className={` w-fit columns-1 gap-x-2
                     sm:columns-2
                     md:columns-3
                     lg:columns-4
-                    xl:columns-5"
+                    xl:columns-5`}
                 >
                     {lsi.map((each) => (
                         <div
-
                             id={each.id}
                             ref={refForId}
                             className=" relative"
@@ -101,7 +101,6 @@ function Notes() {
                         >
 
                             <div
-                                mouse
                                 id={`${each.id}innerDiv`}
                                 onMouseEnter={() => mouseOverfn(true, each)}
                                 onMouseLeave={() => mouseOverfn(false, each)}
