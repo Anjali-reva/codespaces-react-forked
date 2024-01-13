@@ -1,13 +1,12 @@
-import React, { forwardRef, useState } from 'react'
+import React, { useEffect, useState, forwardRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { chooseColor } from '../../2.ReduxToolkit/Slice'
 
-function BackgroundOptions({ bgVisible = false }) {
+function BackgroundOptions() {
 
     const [Border, SetBorder] = useState(false)
     const [selection, setSelection] = useState()
     const dispatch = useDispatch()
-    const color = useSelector((state)=>state.clickToShow.color)
 
     const selectionFn = (index_of_icon) => {
         switch (index_of_icon) {
@@ -21,44 +20,54 @@ function BackgroundOptions({ bgVisible = false }) {
                 break;
             case 3:
                 setSelection(3)
+                dispatch(chooseColor('#f39f76'))
                 break;
             case 4:
                 setSelection(4)
+                dispatch(chooseColor('#fff8b8'))
                 break;
             case 5:
                 setSelection(5)
+                dispatch(chooseColor('#e2f6d3'))
                 break;
             case 6:
                 setSelection(6)
+                dispatch(chooseColor('#baddd3'))
                 break;
             case 7:
                 setSelection(7)
+                dispatch(chooseColor('#d4e4ed'))
                 break;
             case 8:
                 setSelection(8)
+                dispatch(chooseColor('#aeccdc'))
                 break;
             case 9:
                 setSelection(9)
+                dispatch(chooseColor('#d3bfdb'))
                 break;
             case 10:
                 setSelection(10)
+                dispatch(chooseColor('#f6e2dd'))
                 break;
             case 11:
                 setSelection(11)
+                dispatch(chooseColor('#e9e3d4'))
                 break;
             case 12:
                 setSelection(12)
+                dispatch(chooseColor('#efeff1'))
                 break;
             default:
                 setSelection(1)
+                dispatch(chooseColor('white'))
                 break;
         }
-        console.log(color)
     }
 
     return (
         <div
-            className={`bg-white border rounded-2xl shadow-md z-40 ${bgVisible ? 'absolute' : 'hidden'} absolute  w-fit transition-all `}
+            className={`bg-white border rounded-2xl shadow-md z-40  absolute  w-fit transition-all `}
         >
             <div className='flex m-2'>
                 <div
@@ -116,7 +125,7 @@ function BackgroundOptions({ bgVisible = false }) {
                 {/* bg-[#b3bfdb] */}
                 <div
                     onClick={() => selectionFn(9)}
-                    className={`bg-[#b3bfdb] border 
+                    className={`bg-[#d3bfdb] border 
                     ${selection == 9 ? 'border-2 border-blue-600 hover:border-blue-900' : 'border hover:border-black'} h-8 w-8 rounded-full ml-1`}>
                 </div>
 
@@ -159,4 +168,4 @@ function BackgroundOptions({ bgVisible = false }) {
     )
 }
 
-export default forwardRef(BackgroundOptions)
+export default BackgroundOptions
