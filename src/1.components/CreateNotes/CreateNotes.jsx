@@ -28,11 +28,12 @@ function CreateNotes(props) {
             color: color,
         }
         dispatch(updateBoth(updateBoth(note2)))
-        console.log(note2.color)
+        // console.log(note2.color)
         if (input1Value) setInput1Value('')
         if (input2Value) setInput2Value('')
         setColorValue('white')
         setIsEditing(false)
+        dispatch(chooseColor('white'))
     }
 
     // funcnality of click to show title and text input field (line: 30-43)

@@ -1,4 +1,3 @@
-import { Title } from '@mui/icons-material';
 import { createSlice, nanoid } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -26,7 +25,6 @@ export const notesSlice = createSlice({
         updateBoth: (state, action) => {
             const note = action.payload
             state.clickValue.push(note)
-
         },
         showCard: (state, action) => {
             state.clickValue.map((note) => {
@@ -35,13 +33,21 @@ export const notesSlice = createSlice({
                 }
             })
         },
-
+        // getting color value from seperated </BackgroundOptions> component, with the help of below fn.  
         chooseColor: (state, action) => {
             state.color = action.payload
+            // console.log('booom')
+
+        },
+
+        editColorForNote: (state, action) => {
+            state.clickValue.map((each) => { 
+                each.id === action.payload ? console.log(each): console.log('not found ')
+            })
         }
     }
 });
 
-export const { updateBoth, showCard, chooseColor } = notesSlice.actions;
+export const { updateBoth, showCard, chooseColor, editColorForNote } = notesSlice.actions;
 
 export default notesSlice.reducer;

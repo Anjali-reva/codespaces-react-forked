@@ -1,22 +1,26 @@
-import React, { useEffect, useState, forwardRef } from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { chooseColor } from '../../2.ReduxToolkit/Slice'
 
-function BackgroundOptions() {
+function BackgroundOptions({ props, setNoteColor, noteColor }) {
 
     const [Border, SetBorder] = useState(false)
     const [selection, setSelection] = useState()
     const dispatch = useDispatch()
 
     const selectionFn = (index_of_icon) => {
+        // console.log(eachID)
         switch (index_of_icon) {
             case 1:
                 setSelection(1)
                 dispatch(chooseColor('white'))
+                noteColor = 'white'
+                setNoteColor(noteColor)
                 break;
             case 2:
                 setSelection(2)
                 dispatch(chooseColor('#faaea8'))
+                setNoteColor('#faaea8')
                 break;
             case 3:
                 setSelection(3)
@@ -67,6 +71,7 @@ function BackgroundOptions() {
 
     return (
         <div
+
             className={`bg-white border rounded-2xl shadow-md z-40  absolute  w-fit transition-all `}
         >
             <div className='flex m-2'>
