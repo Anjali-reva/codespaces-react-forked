@@ -41,8 +41,8 @@ export const notesSlice = createSlice({
         },
 
         editColorForNote: (state, action) => {
-            state.clickValue.map((each) => { 
-                each.id === action.payload ? console.log(each): console.log('not found ')
+            state.clickValue.map((each) => {
+                each.id === action.payload ? console.log('id from slice',each.id) : console.log('not found from slice')
             })
         }
     }

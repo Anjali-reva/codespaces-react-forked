@@ -12,7 +12,7 @@ import { Icon } from '@iconify/react';
 import PopupCard from '../SupportingComponents/PopupCard';
 import TooltipItem from '../SupportingComponents/Tooltip';
 import BackgroundOptions from '../CreateNotes/BackgroundOptions';
-import { current } from '@reduxjs/toolkit';
+let id = "white"
 
 function Notes() {
     const [lsi, setLsi] = useState([]);
@@ -51,28 +51,26 @@ function Notes() {
     const BGOptionButton = (event) => {
         event.stopPropagation()
         !bgVisible ? setBgVisible(true) : setBgVisible(false)
-        // console.log("the ref is ", refForId.current)
-        // changeNoteColor()
+        
+        
+        // refForId && refForId.current.map((every) => {
+        //     every.addEventListener('click', () => {
+        //         // if (Array.isArray(lsi) && lsi.length > 0) {
+        //         lsi.map((each) => {
+        //             // console.log(each.color)
+        //             if (each.id == every.id) {
+        //                 console.log("match :: each.id is: " + each.id + ' |every.id is: ' + every.id + "each.color is: " + each.color);
+        //                 // each.color = color
+        //                 id = each.id
+        //                 console.log("lsi id color type :: ", id)
+        //                 console.log('noteColor is: i am calling', each.color)
+        //             } else console.log('notFound')
+        //         })
+        //     })
+        // })
     }
 
-    useEffect((event) => {
-        refForId.current.map((every) => {
-            every.addEventListener('click', () => {
-                if (Array.isArray(lsi) && lsi.length > 0) {
-                    lsi.map((each) => {
-                        // console.log(each.color)
-                        if (each.id == every.id) {
-                            console.log("match :: each.id is: " + each.id + ' |every.id is: ' + every.id + "each.color is: " + each.color);
-                            setNoteColor(color)
-                            each.color = noteColor
-                            console.log('noteColor is: i am calling', noteColor)
-                        }
-                    })
-                }
-            })
-        })
-    }, [noteColor, setNoteColor])
-
+    
     // for Popup card
     const handleTriggerClick = () => {
         setIsPopupVisible(true);
@@ -162,7 +160,7 @@ function Notes() {
                                             <Icon icon="tabler:color-filter" color="#4a5568" height={18} />
                                         </TooltipItem>
 
-                                        {bgVisible ? (<BackgroundOptions  setNoteColor={setNoteColor} noteColor={noteColor}/>) : null}
+                                        {bgVisible ? (<BackgroundOptions />) : null}
                                     </div>
                                     {/* ############################################################################################ */}
                                     <div className="mr-5 ">

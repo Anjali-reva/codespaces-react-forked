@@ -1,26 +1,27 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { chooseColor } from '../../2.ReduxToolkit/Slice'
+import { chooseColor, editColorForNote } from '../../2.ReduxToolkit/Slice'
 
-function BackgroundOptions({ props, setNoteColor, noteColor }) {
+function BackgroundOptions({ }) {
 
     const [Border, SetBorder] = useState(false)
     const [selection, setSelection] = useState()
+    const [lsiID, setLsiID] = useState()
     const dispatch = useDispatch()
 
+
     const selectionFn = (index_of_icon) => {
-        // console.log(eachID)
+
+        // event.stopPropagation()
+
         switch (index_of_icon) {
             case 1:
                 setSelection(1)
-                dispatch(chooseColor('white'))
-                noteColor = 'white'
-                setNoteColor(noteColor)
+                chooseColor('white')
                 break;
             case 2:
                 setSelection(2)
-                dispatch(chooseColor('#faaea8'))
-                setNoteColor('#faaea8')
+                chooseColor('#faaea8')
                 break;
             case 3:
                 setSelection(3)
