@@ -7,12 +7,13 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CreateNotes from '../CreateNotes/CreateNotes';
-import { showCard, editColorForNote } from '../../2.ReduxToolkit/Slice';
+import { findingNote, showCard } from '../../2.ReduxToolkit/Slice';
 import { Icon } from '@iconify/react';
 import PopupCard from '../SupportingComponents/PopupCard';
 import TooltipItem from '../SupportingComponents/Tooltip';
 import BackgroundOptions from '../CreateNotes/BackgroundOptions';
 let id = "white"
+
 
 function Notes() {
     const [lsi, setLsi] = useState([]);
@@ -25,7 +26,6 @@ function Notes() {
     const [noteColor, setNoteColor] = useState('white');
 
     const value = useSelector((state) => state.clickToShow.clickValue[state.clickToShow.clickValue.length - 1]);
-    const value2 = useSelector((state) => state.clickToShow.clickValue);
     const color = useSelector((state) => state.clickToShow.color)
     const dispatch = useDispatch();
 
@@ -46,28 +46,29 @@ function Notes() {
         handleTriggerClick()
 
     };
-    // for note color
-    // const value2 = useSelector((state) => state.clickToShow.clickValue);
+
     const BGOptionButton = (event) => {
         event.stopPropagation()
         !bgVisible ? setBgVisible(true) : setBgVisible(false)
         
         
-        // refForId && refForId.current.map((every) => {
-        //     every.addEventListener('click', () => {
-        //         // if (Array.isArray(lsi) && lsi.length > 0) {
-        //         lsi.map((each) => {
-        //             // console.log(each.color)
-        //             if (each.id == every.id) {
-        //                 console.log("match :: each.id is: " + each.id + ' |every.id is: ' + every.id + "each.color is: " + each.color);
-        //                 // each.color = color
-        //                 id = each.id
-        //                 console.log("lsi id color type :: ", id)
-        //                 console.log('noteColor is: i am calling', each.color)
-        //             } else console.log('notFound')
-        //         })
-        //     })
-        // })
+        refForId && refForId.current.map((every) => {
+            every.addEventListener('click', () => {
+                // if (Array.isArray(lsi) && lsi.length > 0) {
+                lsi.map((each) => {
+                    // console.log(each.color)
+                    if (each.id == every.id) {
+                        // console.log("match :: each.id is: " + each.id + ' |every.id is: ' + every.id + "each.color is: " + each.color);
+                        // each.color = color
+                        id = each.id
+                        console.log("lsi id color type :: ", id)
+                        dispatch(findingNote(id))
+                        // console.log('noteColor is: i am calling', each.color)
+                    } 
+                    // else console.log('notFound')
+                })
+            })
+        })
     }
 
     

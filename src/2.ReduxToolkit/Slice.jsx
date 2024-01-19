@@ -14,6 +14,9 @@ const initialState = {
     }],
     color: {
         color: 'white'
+    },
+    id: {
+        id: 'white'
     }
 }
 
@@ -37,17 +40,21 @@ export const notesSlice = createSlice({
         chooseColor: (state, action) => {
             state.color = action.payload
             // console.log('booom')
-
         },
 
-        editColorForNote: (state, action) => {
+        findingNote: (state, action) => {
             state.clickValue.map((each) => {
-                each.id === action.payload ? console.log('id from slice',each.id) : console.log('not found from slice')
+                if (each.id == action.payload) {
+                    console.log('each from slice: ', each.id)
+                    each.color = state.color
+                }
+                console.log('each from slice: ', each.id)
+                
             })
         }
     }
 });
 
-export const { updateBoth, showCard, chooseColor, editColorForNote } = notesSlice.actions;
+export const { updateBoth, showCard, chooseColor, findingNote } = notesSlice.actions;
 
 export default notesSlice.reducer;
