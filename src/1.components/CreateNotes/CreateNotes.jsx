@@ -21,19 +21,18 @@ function CreateNotes(props) {
 
     // For dispatching all the data and clear input field
     const submit = () => {
-        const note2 = {
+        dispatch(updateBoth({
             id: nanoid(),
             Title: input1Value,
             Text: input2Value,
             color: color,
-        }
-        dispatch(updateBoth(updateBoth(note2)))
-        // console.log(note2.color)
+        }))
         if (input1Value) setInput1Value('')
         if (input2Value) setInput2Value('')
         setColorValue('white')
         setIsEditing(false)
         dispatch(chooseColor('white'))
+
     }
 
     // funcnality of click to show title and text input field (line: 30-43)
@@ -44,7 +43,8 @@ function CreateNotes(props) {
     const handleOutsideClick = (event) => {
         if (inputRef.current && !inputRef.current.contains(event.target)) {
             setIsEditing(false);
-            setBgVisible(false)
+            setBgVisible(false);
+
         }
 
     };

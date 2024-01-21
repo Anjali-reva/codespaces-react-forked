@@ -1,18 +1,17 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { chooseColor } from '../../2.ReduxToolkit/Slice'
+import { chooseColor, colorForNote } from '../../2.ReduxToolkit/Slice'
 
-function BackgroundOptions({ }) {
+function BackgroundOptions() {
 
     const [Border, SetBorder] = useState(false)
     const [selection, setSelection] = useState()
     const [lsiID, setLsiID] = useState()
     const dispatch = useDispatch()
+    const idForNote = useSelector((state) => state.clickToShow.id)
 
 
     const selectionFn = (index_of_icon) => {
-
-        // event.stopPropagation()
 
         switch (index_of_icon) {
             case 1:
@@ -68,6 +67,8 @@ function BackgroundOptions({ }) {
                 dispatch(chooseColor('white'))
                 break;
         }
+        console.log('id For Note is : ', idForNote)
+        dispatch(colorForNote(idForNote))
     }
 
     return (

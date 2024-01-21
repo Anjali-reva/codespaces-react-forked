@@ -16,7 +16,7 @@ const initialState = {
         color: 'white'
     },
     id: {
-        id: 'white'
+        id: 'abcd1234'
     }
 }
 
@@ -36,25 +36,24 @@ export const notesSlice = createSlice({
                 }
             })
         },
-        // getting color value from seperated </BackgroundOptions> component, with the help of below fn.  
         chooseColor: (state, action) => {
             state.color = action.payload
-            // console.log('booom')
         },
 
-        findingNote: (state, action) => {
+        idForColor: (state, action) => {
+            state.id = action.payload
+        },
+
+        colorForNote: (state, action) => {
             state.clickValue.map((each) => {
                 if (each.id == action.payload) {
-                    console.log('each from slice: ', each.id)
                     each.color = state.color
                 }
-                console.log('each from slice: ', each.id)
-                
             })
         }
     }
 });
 
-export const { updateBoth, showCard, chooseColor, findingNote } = notesSlice.actions;
+export const { updateBoth, showCard, chooseColor, colorForNote, idForColor } = notesSlice.actions;
 
 export default notesSlice.reducer;

@@ -7,16 +7,16 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CreateNotes from '../CreateNotes/CreateNotes';
-import { findingNote, showCard } from '../../2.ReduxToolkit/Slice';
+import { idForColor, showCard } from '../../2.ReduxToolkit/Slice';
 import { Icon } from '@iconify/react';
 import PopupCard from '../SupportingComponents/PopupCard';
 import TooltipItem from '../SupportingComponents/Tooltip';
 import BackgroundOptions from '../CreateNotes/BackgroundOptions';
-let id = "white"
+
 
 
 function Notes() {
-    const [lsi, setLsi] = useState([]);
+
     const refForId = useRef([]);
     const [cardText, setCardText] = useState('');
     const [cardTitle, setCardTitle] = useState('');
@@ -24,19 +24,8 @@ function Notes() {
     const [mouseOver, setMouseOver] = useState(false);
     const [bgVisible, setBgVisible] = useState(false);
     const [noteColor, setNoteColor] = useState('white');
-
-    const value = useSelector((state) => state.clickToShow.clickValue[state.clickToShow.clickValue.length - 1]);
-    const color = useSelector((state) => state.clickToShow.color)
+    const value = useSelector((state) => state.clickToShow.clickValue);
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        if (value && value.payload) {
-            const ls = { ...value.payload };
-            setLsi((prevLsi) => [...prevLsi, ls]);
-            console.log('lsi isi:', lsi);
-            console.log('value is:', value);
-        }
-    }, [value]);
 
     const handleClick = (each) => {
         // console.log(each.id);
@@ -50,28 +39,22 @@ function Notes() {
     const BGOptionButton = (event) => {
         event.stopPropagation()
         !bgVisible ? setBgVisible(true) : setBgVisible(false)
-        
-        
+
+
         refForId && refForId.current.map((every) => {
-            every.addEventListener('click', () => {
-                // if (Array.isArray(lsi) && lsi.length > 0) {
-                lsi.map((each) => {
+            every?.addEventListener('click', () => {
+                value.map((each) => {
                     // console.log(each.color)
                     if (each.id == every.id) {
-                        // console.log("match :: each.id is: " + each.id + ' |every.id is: ' + every.id + "each.color is: " + each.color);
-                        // each.color = color
-                        id = each.id
-                        console.log("lsi id color type :: ", id)
-                        dispatch(findingNote(id))
-                        // console.log('noteColor is: i am calling', each.color)
-                    } 
-                    // else console.log('notFound')
+                        console.log("match :: each.id is: " + each.id + ' |every.id is: ' + every.id + "each.color is: " + each.color);
+                        dispatch(idForColor(each.id))
+                    }
                 })
             })
         })
     }
 
-    
+
     // for Popup card
     const handleTriggerClick = () => {
         setIsPopupVisible(true);
@@ -82,6 +65,10 @@ function Notes() {
             setIsPopupVisible(false);
         }
     };
+
+    useEffect(() => {
+        console.log(value)
+    }, [value])
 
     useEffect(() => {
         document.addEventListener('mousedown', handleOutsideClick)
@@ -122,7 +109,7 @@ function Notes() {
                     xl:columns-5
                     2xl:columns-5`}
                 >
-                    {lsi.map((each, index) => (
+                    {value.map((each, index) => (
                         <div
                             key={`${each.id}17-1-2024:05:03`}
                             id={each.id}
@@ -161,7 +148,9 @@ function Notes() {
                                             <Icon icon="tabler:color-filter" color="#4a5568" height={18} />
                                         </TooltipItem>
 
-                                        {bgVisible ? (<BackgroundOptions />) : null}
+                                        {bgVisible ? (
+                                            <BackgroundOptions />
+                                        ) : null}
                                     </div>
                                     {/* ############################################################################################ */}
                                     <div className="mr-5 ">
