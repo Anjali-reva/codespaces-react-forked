@@ -1,15 +1,30 @@
-import React from "react"
-import { useSelector } from "react-redux"
+import React, { useState } from "react"
 
 
-export default function Test() {
 
-    const each = useSelector((state)=>state.clickToShow.id)
+export default function Test({ valuefn }) {
+
+    const [value, setValue] = useState(false)
+
+    const add = () => {
+        console.log(value)
+        if (value == true) {
+            valuefn('true')
+            setValue(false)
+        } else if (value == false) {
+            valuefn('false')
+            setValue(true)
+        }
+
+    }
 
     return (
-        <div className="w-full flex flex-col justify-center">
-            <div className="text-center">{each.id}</div>
-            <button className="border p-1 my-2">Show</button>
+        <div className="">
+            <p>Test hear.</p>
+
+            {/* <input className="border" type="text" value={value} onChange={(e) => setValue(e.target.value)} /> */}
+
+            <button className="border" onClick={() => add()}>add</button>
         </div>
     )
 }

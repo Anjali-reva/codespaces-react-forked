@@ -61,23 +61,24 @@ function Notes() {
     };
 
     const handleOutsideClick = (event) => {
-        if (refForId.current && !refForId.current.some((ref) => ref && ref.contains(event.target))) {
-            setIsPopupVisible(false);
-        }
+        // if (refForId.current && !refForId.current.some((ref) => ref && ref.contains(event.target))) {
+        //     setIsPopupVisible(false);
+        // }
+        setIsPopupVisible(false);
     };
 
     useEffect(() => {
         console.log(value)
     }, [value])
 
-    useEffect(() => {
-        document.addEventListener('mousedown', handleOutsideClick)
+    // useEffect(() => {
+    //     document.addEventListener('mousedown', handleOutsideClick)
 
-        return () => {
-            document.removeEventListener('mousedown', handleOutsideClick)
-            setMouseOver(false)
-        }
-    }, [])
+    //     return () => {
+    //         document.removeEventListener('mousedown', handleOutsideClick)
+    //         setMouseOver(false)
+    //     }
+    // }, [])
 
     const mouseOverfn = (condition, each) => {
         if (condition) {
@@ -176,7 +177,12 @@ function Notes() {
                     ))}
                 </div>
             </div>
-            {isPopupVisible && (<PopupCard ref={refForId} Title={cardTitle} Text={cardText} />)}
+            {isPopupVisible && (<PopupCard
+                ref={refForId}
+                Title={cardTitle}
+                Text={cardText}
+                handleOutsideClick={handleOutsideClick}
+            />)}
         </div>
     );
 }

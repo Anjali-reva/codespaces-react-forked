@@ -44,7 +44,6 @@ function CreateNotes(props) {
         if (inputRef.current && !inputRef.current.contains(event.target)) {
             setIsEditing(false);
             setBgVisible(false);
-
         }
 
     };

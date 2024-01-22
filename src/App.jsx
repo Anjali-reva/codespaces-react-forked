@@ -5,18 +5,18 @@ import LeftSideBar from './1.components/sidebaar/LeftSideBar';
 import { store } from './2.ReduxToolkit/Store';
 import { Provider } from 'react-redux';
 import Test from './Test';
-
+import { useState } from 'react';
 
 function App() {
 
-  
+  const [first, setfirst] = useState('first value')
 
   return (
     <Provider store={store}>
-         <Notes />
-         <LeftSideBar/>
-         <Header />
-         <Test/>  
+      <Notes />
+      <LeftSideBar/>
+      <Header />
+      {/* <Test /> */}
     </Provider >
   );
 }
