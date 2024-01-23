@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { chooseColor, colorForNote } from '../../2.ReduxToolkit/Slice'
+import { chooseColor, chooseImg, colorForNote } from '../../2.ReduxToolkit/Slice'
+import { img1 } from '../../img/img'
 
 function BackgroundOptions() {
 
     const [Border, SetBorder] = useState(false)
     const [selection, setSelection] = useState()
-    const [lsiID, setLsiID] = useState()
     const dispatch = useDispatch()
     const idForNote = useSelector((state) => state.clickToShow.id)
 
@@ -158,10 +158,21 @@ function BackgroundOptions() {
                 </div>
 
             </div>
+
             <hr />
+
             <div className='flex m-2'>
-                <div className='bg-white border hover:border-black h-10 w-10 rounded-full ml-1'></div>
-                <div className='bg-white border hover:border-black h-10 w-10 rounded-full ml-1'></div>
+                <div
+                    className={`bg-white border hover:border-black h-10 w-10 rounded-full ml-1`}
+                    onClick={() => dispatch(chooseImg('white'))}
+                >
+                </div>
+
+                <div
+                    className={`bg-[url(${img1})] bg-cover bg-center hover:border-black h-10 w-10 rounded-full ml-1`}
+                    onClick={() => dispatch(chooseImg('bg-img-2'))}
+                >
+                </div>
                 <div className='bg-white border hover:border-black h-10 w-10 rounded-full ml-1'></div>
                 <div className='bg-white border hover:border-black h-10 w-10 rounded-full ml-1'></div>
                 <div className='bg-white border hover:border-black h-10 w-10 rounded-full ml-1'></div>

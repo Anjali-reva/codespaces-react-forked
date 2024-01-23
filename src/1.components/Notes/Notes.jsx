@@ -11,7 +11,9 @@ import { idForColor, showCard } from '../../2.ReduxToolkit/Slice';
 import { Icon } from '@iconify/react';
 import PopupCard from '../SupportingComponents/PopupCard';
 import TooltipItem from '../SupportingComponents/Tooltip';
-import BackgroundOptions from '../CreateNotes/BackgroundOptions';
+import BackgroundOptions from '../SupportingComponents/BackgroundOptions';
+import { img1 } from '../../img/img';
+import MoreOption from '../SupportingComponents/MoreOption';
 
 
 
@@ -20,10 +22,12 @@ function Notes() {
     const refForId = useRef([]);
     const [cardText, setCardText] = useState('');
     const [cardTitle, setCardTitle] = useState('');
+    const [cardColor, setCardColor] = useState('');
+    const [cardImg, setCardImg] = useState('');
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [mouseOver, setMouseOver] = useState(false);
     const [bgVisible, setBgVisible] = useState(false);
-    const [noteColor, setNoteColor] = useState('white');
+    const [moreListVisible, setMoreListVisible] = useState(false);
     const value = useSelector((state) => state.clickToShow.clickValue);
     const dispatch = useDispatch();
 
@@ -32,15 +36,13 @@ function Notes() {
         dispatch(showCard(each.id));
         setCardText(each.Text)
         setCardTitle(each.Title)
+        setCardColor(each.color)
+        setCardImg(each.Img)
         handleTriggerClick()
-
     };
 
-    const BGOptionButton = (event) => {
-        event.stopPropagation()
-        !bgVisible ? setBgVisible(true) : setBgVisible(false)
-
-
+    
+    const dispatchIdOnlick = () => {
         refForId && refForId.current.map((every) => {
             every?.addEventListener('click', () => {
                 value.map((each) => {
@@ -54,6 +56,17 @@ function Notes() {
         })
     }
 
+    const BGOptionButton = (event) => {
+        event.stopPropagation()
+        !bgVisible ? setBgVisible(true) : setBgVisible(false)
+        dispatchIdOnlick()
+    }
+
+    const moreOptionButton = (event) => {
+        event.stopPropagation()
+        !moreListVisible ? setMoreListVisible(true) : setMoreListVisible(false)
+        dispatchIdOnlick()
+    }
 
     // for Popup card
     const handleTriggerClick = () => {
@@ -71,15 +84,6 @@ function Notes() {
         console.log(value)
     }, [value])
 
-    // useEffect(() => {
-    //     document.addEventListener('mousedown', handleOutsideClick)
-
-    //     return () => {
-    //         document.removeEventListener('mousedown', handleOutsideClick)
-    //         setMouseOver(false)
-    //     }
-    // }, [])
-
     const mouseOverfn = (condition, each) => {
         if (condition) {
             setMouseOver(true);
@@ -88,6 +92,7 @@ function Notes() {
             setMouseOver(false);
             document.getElementById(`${each.id}iconDiv`).style.opacity = '0%'
             setBgVisible(false)
+            setMoreListVisible(false)
         };
 
     }
@@ -115,7 +120,7 @@ function Notes() {
                             key={`${each.id}17-1-2024:05:03`}
                             id={each.id}
                             ref={(el) => refForId.current[index] = el}
-                            className=""
+                            className={``}
                             onClick={() => handleClick(each)}
                         >
 
@@ -123,8 +128,10 @@ function Notes() {
                                 id={`${each.id}innerDiv`}
                                 onMouseEnter={() => mouseOverfn(true, each)}
                                 onMouseLeave={() => mouseOverfn(false, each)}
-                                className={`block border bg-[${each.color}] break-inside-avoid bg-[${each.color}] border-gray-200 w-full 
-                                 rounded-md h-fit  mx-1 p-3 mb-2 leading-tight tracking-tight transition-all rounded-scrollbar-container hover:shadow-md
+                                className={`
+                                    ${each.Img !== "white" ? `bg-[url(${img1})]` : `bg-[${each.color}]`} bg-cover bg-center
+                                 block border break-inside-avoid  border-gray-200 w-full 
+                                 rounded-md h-fit  mx-1 p-3 mb-2 leading-tight tracking-tight transition-all  hover:shadow-md
                                  `}
                             >
                                 <p className="mb-3  text-black text-[1.200rem]">{each.Title}</p>
@@ -133,13 +140,12 @@ function Notes() {
                                 {/* all the icons are hear */}
                                 <div
                                     id={`${each.id}iconDiv`}
-                                    className={`flex mt-3 bg-[${each.color}] opacity-0 transition-all`} >
+                                    className={`flex mt-3 items-center justify-center bg-[${each.color}] rounded-md px-2 pt-1 opacity-0 transition-all`} >
                                     <div className="mr-5 ">
                                         <TooltipItem position="bottom" tooltipsText="Remind me">
                                             <Icon icon="bx:bell-plus" color="#4a5568" height={18} />
                                         </TooltipItem>
                                     </div>
-                                    {/* ############################################################################################ */}
                                     <div
                                         id='sakib'
                                         className="mr-5 relative"
@@ -153,7 +159,6 @@ function Notes() {
                                             <BackgroundOptions />
                                         ) : null}
                                     </div>
-                                    {/* ############################################################################################ */}
                                     <div className="mr-5 ">
                                         <TooltipItem position="bottom" tooltipsText="Add image">
                                             <Icon icon="fluent:image-24-regular" color="#4a5568" height={18} />
@@ -166,9 +171,17 @@ function Notes() {
                                         </TooltipItem>
                                     </div>
 
-                                    <div className="  ">
+                                    <div
+                                        className="relative"
+                                        onClick={(event) => moreOptionButton(event)}
+                                    >
                                         <TooltipItem position="bottom" tooltipsText="More">
                                             <Icon icon="icon-park-outline:more-four" color="#4a5568" height={18} />
+
+                                            {moreListVisible ? (
+                                                <MoreOption />
+                                            ) : null}
+
                                         </TooltipItem>
                                     </div>
                                 </div>
@@ -181,6 +194,8 @@ function Notes() {
                 ref={refForId}
                 Title={cardTitle}
                 Text={cardText}
+                Color={cardColor}
+                img={cardImg}
                 handleOutsideClick={handleOutsideClick}
             />)}
         </div>

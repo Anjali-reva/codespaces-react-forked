@@ -5,19 +5,23 @@ const initialState = {
         id: 1,
         Title: 'IT ENDS WITH US',
         Text: 'A book writen by Collen Hoover.this is very romentic book.',
-        color: 'white'
+        color: 'white',
+        Img: 'white'
     }],
 
     // supporting states
+    id: {
+        id: 'abcd1234'
+    },
     cardValue: [{
         Text: 'card text'
     }],
     color: {
         color: 'white'
     },
-    id: {
-        id: 'abcd1234'
-    }
+    Img: {
+        Img: 'white'
+    },
 }
 
 export const notesSlice = createSlice({
@@ -40,6 +44,10 @@ export const notesSlice = createSlice({
             state.color = action.payload
         },
 
+        chooseImg: (state, action) => {
+            state.Img = action.payload
+        },
+
         idForColor: (state, action) => {
             state.id = action.payload
         },
@@ -50,10 +58,23 @@ export const notesSlice = createSlice({
                     each.color = state.color
                 }
             })
+        },
+
+        deleteNote: (state, action) => {
+            state.clickValue = state.clickValue.filter((each) => each.id !== action.payload)
+
         }
     }
 });
 
-export const { updateBoth, showCard, chooseColor, colorForNote, idForColor } = notesSlice.actions;
+export const {
+    updateBoth,
+    showCard,
+    chooseColor,
+    colorForNote,
+    idForColor,
+    chooseImg,
+    deleteNote,
+} = notesSlice.actions;
 
 export default notesSlice.reducer;

@@ -1,30 +1,30 @@
-import React, { useState } from "react"
+import React, { useState } from 'react';
 
+const StateSelector = () => {
+    const [selectedState, setSelectedState] = useState(null);
 
-
-export default function Test({ valuefn }) {
-
-    const [value, setValue] = useState(false)
-
-    const add = () => {
-        console.log(value)
-        if (value == true) {
-            valuefn('true')
-            setValue(false)
-        } else if (value == false) {
-            valuefn('false')
-            setValue(true)
-        }
-
-    }
+    const handleStateClick = (state) => {
+        setSelectedState(state);
+    };
 
     return (
-        <div className="">
-            <p>Test hear.</p>
-
-            {/* <input className="border" type="text" value={value} onChange={(e) => setValue(e.target.value)} /> */}
-
-            <button className="border" onClick={() => add()}>add</button>
+        <div>
+            {['State 1', 'State 2', 'State 3', 'State 4', 'State 5'].map((each, index) => (
+                <div
+                    key={index}
+                    onClick={() => handleStateClick(each)}
+                    style={{
+                        padding: '10px',
+                        margin: '5px',
+                        backgroundColor: selectedState == each ? 'lightblue' : 'white',
+                        cursor: 'pointer',
+                    }}
+                >
+                    {state}
+                </div>
+            ))}
         </div>
-    )
-}
+    );
+};
+
+export default StateSelector;
