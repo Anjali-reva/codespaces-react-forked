@@ -1,7 +1,7 @@
 import React, { forwardRef, useEffect, useState, useRef } from 'react'
 import { Icon } from '@iconify/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateBoth, chooseColor, chooseImg } from '../../2.ReduxToolkit/Slice';
+import { updateBoth, chooseColor } from '../../2.ReduxToolkit/Slice';
 import { nanoid } from '@reduxjs/toolkit';
 import TooltipItem from "../SupportingComponents/Tooltip";
 import BackgroundOptions from '../SupportingComponents/BackgroundOptions';
@@ -13,7 +13,6 @@ function CreateNotes(props) {
 
     const dispatch = useDispatch()
     const color = useSelector((state) => state.clickToShow.color)
-    const Img = useSelector((state) => state.clickToShow.Img)
 
     const [input1Value, setInput1Value] = useState('')
     const [input2Value, setInput2Value] = useState('')
@@ -29,14 +28,13 @@ function CreateNotes(props) {
             Title: input1Value,
             Text: input2Value,
             color: color,
-            Img: Img,
         }))
         if (input1Value) setInput1Value('')
         if (input2Value) setInput2Value('')
         setColorValue('white')
         setIsEditing(false)
         dispatch(chooseColor('white'))
-        dispatch(chooseImg('white'))
+        console.log(color);
     }
 
     // funcnality of click to show title and text input field (line: 30-43)
@@ -59,24 +57,14 @@ function CreateNotes(props) {
         document.addEventListener('mousedown', handleOutsideClick);
     }, []);
 
-    useEffect(() => {
-
-        if (Img !== 'white') {
-            setColorValue(`url(${img1})`)
-        } else {
-            setColorValue(`${color}`)
-        }
-
-        console.log(Img)
-        // setColorValue(`${color}`)
-    }, [color, Img]);
+    // useEffect(() => {
 
     return (
         <div
             id='CreateNotes'
             className='w-full '>
             {/* bg-[${colorValue}] */}
-            <div className={`border-t bg-[${colorValue}] bg-cover bg-left  rounded-xl shadow-md justify-center transition-all
+            <div className={`border-t bg-[${color}] bg-cover bg-center  rounded-xl shadow-md justify-center transition-all
                     sm:w-[75%] sm:m-auto
                     lg:w-[45%] lg:m-auto
                     w-[calc(100%-5rem)] ml-[2.8rem] mr-4
@@ -111,7 +99,7 @@ function CreateNotes(props) {
                                 </div>
 
                                 {/* All the icons are hear */}
-                                <div className={`bg-[${color}]  border-gray-400 flex justify-center items-center rounded-lg mt-4 px-2 pt-1`}>
+                                <div className={`bg-white  border-gray-400 flex justify-center items-center rounded-lg mt-4 px-2 pt-1`}>
 
                                     <div className='mr-7    '>
                                         <TooltipItem position="bottom" tooltipsText="Remind me">

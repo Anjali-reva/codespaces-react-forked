@@ -12,7 +12,7 @@ import { Icon } from '@iconify/react';
 import PopupCard from '../SupportingComponents/PopupCard';
 import TooltipItem from '../SupportingComponents/Tooltip';
 import BackgroundOptions from '../SupportingComponents/BackgroundOptions';
-import { img1 } from '../../img/img';
+// import { img1 } from '../../img/img';
 import MoreOption from '../SupportingComponents/MoreOption';
 
 
@@ -21,6 +21,7 @@ function Notes() {
 
     const refForId = useRef([]);
     const [cardText, setCardText] = useState('');
+    const [cardData, setCardData] = useState({});
     const [cardTitle, setCardTitle] = useState('');
     const [cardColor, setCardColor] = useState('');
     const [cardImg, setCardImg] = useState('');
@@ -38,17 +39,19 @@ function Notes() {
         setCardTitle(each.Title)
         setCardColor(each.color)
         setCardImg(each.Img)
+        console.log(each)
+        setCardData(each)
         handleTriggerClick()
     };
 
-    
+
     const dispatchIdOnlick = () => {
         refForId && refForId.current.map((every) => {
             every?.addEventListener('click', () => {
                 value.map((each) => {
                     // console.log(each.color)
                     if (each.id == every.id) {
-                        console.log("match :: each.id is: " + each.id + ' |every.id is: ' + every.id + "each.color is: " + each.color);
+                        // console.log("match :: each.id is: " + each.id + ' | every.id is: ' + every.id + "each.color is: " + each.color);
                         dispatch(idForColor(each.id))
                     }
                 })
@@ -129,8 +132,8 @@ function Notes() {
                                 onMouseEnter={() => mouseOverfn(true, each)}
                                 onMouseLeave={() => mouseOverfn(false, each)}
                                 className={`
-                                    ${each.Img !== "white" ? `bg-[url(${img1})]` : `bg-[${each.color}]`} bg-cover bg-center
-                                 block border break-inside-avoid  border-gray-200 w-full 
+                                    ${each.color === "white" ? `border bg-[${each.color}] ` : `bg-[${each.color}]`} bg-cover bg-center
+                                 block  break-inside-avoid  border-gray-200 w-full 
                                  rounded-md h-fit  mx-1 p-3 mb-2 leading-tight tracking-tight transition-all  hover:shadow-md
                                  `}
                             >
@@ -140,7 +143,7 @@ function Notes() {
                                 {/* all the icons are hear */}
                                 <div
                                     id={`${each.id}iconDiv`}
-                                    className={`flex mt-3 items-center justify-center bg-[${each.color}] rounded-md px-2 pt-1 opacity-0 transition-all`} >
+                                    className={`flex mt-3 items-center justify-center bg-white rounded-md px-2 pt-1 opacity-0 transition-all`} >
                                     <div className="mr-5 ">
                                         <TooltipItem position="bottom" tooltipsText="Remind me">
                                             <Icon icon="bx:bell-plus" color="#4a5568" height={18} />
@@ -196,6 +199,7 @@ function Notes() {
                 Text={cardText}
                 Color={cardColor}
                 img={cardImg}
+                cardData={cardData}
                 handleOutsideClick={handleOutsideClick}
             />)}
         </div>

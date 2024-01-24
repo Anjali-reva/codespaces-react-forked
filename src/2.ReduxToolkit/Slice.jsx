@@ -4,7 +4,7 @@ const initialState = {
     clickValue: [{
         id: 1,
         Title: 'IT ENDS WITH US',
-        Text: 'A book writen by Collen Hoover.this is very romentic book.',
+        Text: 'A book writen by Collen Hoover. it is very romentic book.',
         color: 'white',
         Img: 'white'
     }],
@@ -44,14 +44,6 @@ export const notesSlice = createSlice({
             state.color = action.payload
         },
 
-        chooseImg: (state, action) => {
-            state.Img = action.payload
-        },
-
-        idForColor: (state, action) => {
-            state.id = action.payload
-        },
-
         colorForNote: (state, action) => {
             state.clickValue.map((each) => {
                 if (each.id == action.payload) {
@@ -59,6 +51,24 @@ export const notesSlice = createSlice({
                 }
             })
         },
+
+        chooseImg: (state, action) => {
+            state.Img = action.payload
+        },
+        
+        ImgForNote: (state, action) => {
+            state.clickValue.map((each) => {
+                if (each.id == action.payload) {
+                    each.Img = state.Img
+                }
+            })
+        },
+
+        idForColor: (state, action) => {
+            state.id = action.payload
+        },
+
+
 
         deleteNote: (state, action) => {
             state.clickValue = state.clickValue.filter((each) => each.id !== action.payload)
@@ -74,6 +84,7 @@ export const {
     colorForNote,
     idForColor,
     chooseImg,
+    ImgForNote,
     deleteNote,
 } = notesSlice.actions;
 
