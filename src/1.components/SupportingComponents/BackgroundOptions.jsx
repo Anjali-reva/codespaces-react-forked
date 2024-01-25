@@ -1,26 +1,28 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { chooseColor } from '../../2.ReduxToolkit/Slice'
+import { chooseColor, colorForNote } from '../../2.ReduxToolkit/Slice'
+import { img1, img2, img3, img4 } from '../../img/img'
 
-function BackgroundOptions({ props, setNoteColor, noteColor }) {
+
+function BackgroundOptions() {
 
     const [Border, SetBorder] = useState(false)
     const [selection, setSelection] = useState()
+    const [Imgselection, setImgSelection] = useState()
     const dispatch = useDispatch()
+    const idForNote = useSelector((state) => state.clickToShow.id)
+
 
     const selectionFn = (index_of_icon) => {
-        // console.log(eachID)
+
         switch (index_of_icon) {
             case 1:
                 setSelection(1)
                 dispatch(chooseColor('white'))
-                noteColor = 'white'
-                setNoteColor(noteColor)
                 break;
             case 2:
                 setSelection(2)
                 dispatch(chooseColor('#faaea8'))
-                setNoteColor('#faaea8')
                 break;
             case 3:
                 setSelection(3)
@@ -67,13 +69,47 @@ function BackgroundOptions({ props, setNoteColor, noteColor }) {
                 dispatch(chooseColor('white'))
                 break;
         }
+        dispatch(colorForNote(idForNote))
+    }
+
+    const ImgSelectionFn = (index_of_icon) => {
+
+        switch (index_of_icon) {
+            case 1:
+                setImgSelection(1)
+                dispatch(chooseColor('white'))
+                // chooseColor('white')
+                break;
+            case 2:
+                setImgSelection(2)
+                dispatch(chooseColor(`url(${img1})`))
+                break;
+            case 3:
+                setImgSelection(3)
+                dispatch(chooseColor(`url(${img2})`))
+                break;
+            case 4:
+                setImgSelection(4)
+                dispatch(chooseColor(`url(${img3})`))
+                break;
+            case 5:
+                setImgSelection(5)
+                dispatch(chooseColor(`url(${img4})`))
+                break;
+            default:
+                setImgSelection(1)
+                dispatch(chooseImg('white'))
+                break;
+        }
+        dispatch(colorForNote(idForNote))
     }
 
     return (
         <div
 
-            className={`bg-white border rounded-2xl shadow-md z-40  absolute  w-fit transition-all `}
+            className={`bg-white border rounded-2xl shadow-md z-40  absolute  w-fit  -left-[90%] transition-all `}
         >
+            {/* choosing color */}
             <div className='flex m-2'>
                 <div
                     onClick={() => selectionFn(1)}
@@ -156,13 +192,38 @@ function BackgroundOptions({ props, setNoteColor, noteColor }) {
                 </div>
 
             </div>
+
             <hr />
+
             <div className='flex m-2'>
-                <div className='bg-white border hover:border-black h-10 w-10 rounded-full ml-1'></div>
-                <div className='bg-white border hover:border-black h-10 w-10 rounded-full ml-1'></div>
-                <div className='bg-white border hover:border-black h-10 w-10 rounded-full ml-1'></div>
-                <div className='bg-white border hover:border-black h-10 w-10 rounded-full ml-1'></div>
-                <div className='bg-white border hover:border-black h-10 w-10 rounded-full ml-1'></div>
+                {/* choosing img */}
+                <div
+                    className={`bg-white border hover:border-black h-10 w-10 rounded-full ml-1`}
+                    onClick={() => ImgSelectionFn(1)}
+                >
+                </div>
+
+                <div
+                    className={`bg-[url(${img1})] bg-cover bg-center hover:border-black h-10 w-10 rounded-full ml-1`}
+                    onClick={() => ImgSelectionFn(2)}
+                >
+                </div>
+                <div
+                    className={`bg-[url(${img2})] bg-cover bg-center hover:border-black h-10 w-10 rounded-full ml-1`}
+                    onClick={() => ImgSelectionFn(3)}
+                >
+                </div>
+                <div
+                    className={`bg-[url(${img3})] bg-cover bg-center hover:border-black h-10 w-10 rounded-full ml-1`}
+                    onClick={() => ImgSelectionFn(4)}
+                >
+                </div>
+
+                <div
+                    className={`bg-[url(${img4})] bg-cover bg-center hover:border-black h-10 w-10 rounded-full ml-1`}
+                    onClick={() => ImgSelectionFn(5)}
+                >
+                </div>
                 <div className='bg-white border hover:border-black h-10 w-10 rounded-full ml-1'></div>
                 <div className='bg-white border hover:border-black h-10 w-10 rounded-full ml-1'></div>
                 <div className='bg-white border hover:border-black h-10 w-10 rounded-full ml-1'></div>

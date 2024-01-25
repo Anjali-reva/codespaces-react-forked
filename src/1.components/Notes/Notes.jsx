@@ -7,71 +7,69 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CreateNotes from '../CreateNotes/CreateNotes';
-import { showCard, editColorForNote } from '../../2.ReduxToolkit/Slice';
+import { idForColor, showCard } from '../../2.ReduxToolkit/Slice';
 import { Icon } from '@iconify/react';
 import PopupCard from '../SupportingComponents/PopupCard';
 import TooltipItem from '../SupportingComponents/Tooltip';
-import BackgroundOptions from '../CreateNotes/BackgroundOptions';
-import { current } from '@reduxjs/toolkit';
+import BackgroundOptions from '../SupportingComponents/BackgroundOptions';
+// import { img1 } from '../../img/img';
+import MoreOption from '../SupportingComponents/MoreOption';
+
+
 
 function Notes() {
-    const [lsi, setLsi] = useState([]);
+
     const refForId = useRef([]);
     const [cardText, setCardText] = useState('');
+    const [cardData, setCardData] = useState({});
     const [cardTitle, setCardTitle] = useState('');
+    const [cardColor, setCardColor] = useState('');
+    const [cardImg, setCardImg] = useState('');
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [mouseOver, setMouseOver] = useState(false);
     const [bgVisible, setBgVisible] = useState(false);
-    const [noteColor, setNoteColor] = useState('white');
-
-    const value = useSelector((state) => state.clickToShow.clickValue[state.clickToShow.clickValue.length - 1]);
-    const value2 = useSelector((state) => state.clickToShow.clickValue);
-    const color = useSelector((state) => state.clickToShow.color)
+    const [moreListVisible, setMoreListVisible] = useState(false);
+    const value = useSelector((state) => state.clickToShow.clickValue);
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        if (value && value.payload) {
-            const ls = { ...value.payload };
-            setLsi((prevLsi) => [...prevLsi, ls]);
-            console.log('lsi isi:', lsi);
-            console.log('value is:', value);
-        }
-    }, [value]);
 
     const handleClick = (each) => {
         // console.log(each.id);
         dispatch(showCard(each.id));
         setCardText(each.Text)
         setCardTitle(each.Title)
+        setCardColor(each.color)
+        setCardImg(each.Img)
+        console.log(each)
+        setCardData(each)
         handleTriggerClick()
-
     };
-    // for note color
-    // const value2 = useSelector((state) => state.clickToShow.clickValue);
+
+
+    const dispatchIdOnlick = () => {
+        refForId && refForId.current.map((every) => {
+            every?.addEventListener('click', () => {
+                value.map((each) => {
+                    // console.log(each.color)
+                    if (each.id == every.id) {
+                        // console.log("match :: each.id is: " + each.id + ' | every.id is: ' + every.id + "each.color is: " + each.color);
+                        dispatch(idForColor(each.id))
+                    }
+                })
+            })
+        })
+    }
+
     const BGOptionButton = (event) => {
         event.stopPropagation()
         !bgVisible ? setBgVisible(true) : setBgVisible(false)
-        // console.log("the ref is ", refForId.current)
-        // changeNoteColor()
+        dispatchIdOnlick()
     }
 
-    useEffect((event) => {
-        refForId.current.map((every) => {
-            every.addEventListener('click', () => {
-                if (Array.isArray(lsi) && lsi.length > 0) {
-                    lsi.map((each) => {
-                        // console.log(each.color)
-                        if (each.id == every.id) {
-                            console.log("match :: each.id is: " + each.id + ' |every.id is: ' + every.id + "each.color is: " + each.color);
-                            setNoteColor(color)
-                            each.color = noteColor
-                            console.log('noteColor is: i am calling', noteColor)
-                        }
-                    })
-                }
-            })
-        })
-    }, [noteColor, setNoteColor])
+    const moreOptionButton = (event) => {
+        event.stopPropagation()
+        !moreListVisible ? setMoreListVisible(true) : setMoreListVisible(false)
+        dispatchIdOnlick()
+    }
 
     // for Popup card
     const handleTriggerClick = () => {
@@ -79,19 +77,15 @@ function Notes() {
     };
 
     const handleOutsideClick = (event) => {
-        if (refForId.current && !refForId.current.some((ref) => ref && ref.contains(event.target))) {
-            setIsPopupVisible(false);
-        }
+        // if (refForId.current && !refForId.current.some((ref) => ref && ref.contains(event.target))) {
+        //     setIsPopupVisible(false);
+        // }
+        setIsPopupVisible(false);
     };
 
     useEffect(() => {
-        document.addEventListener('mousedown', handleOutsideClick)
-
-        return () => {
-            document.removeEventListener('mousedown', handleOutsideClick)
-            setMouseOver(false)
-        }
-    }, [])
+        console.log(value)
+    }, [value])
 
     const mouseOverfn = (condition, each) => {
         if (condition) {
@@ -101,6 +95,7 @@ function Notes() {
             setMouseOver(false);
             document.getElementById(`${each.id}iconDiv`).style.opacity = '0%'
             setBgVisible(false)
+            setMoreListVisible(false)
         };
 
     }
@@ -123,12 +118,12 @@ function Notes() {
                     xl:columns-5
                     2xl:columns-5`}
                 >
-                    {lsi.map((each, index) => (
+                    {value.map((each, index) => (
                         <div
                             key={`${each.id}17-1-2024:05:03`}
                             id={each.id}
                             ref={(el) => refForId.current[index] = el}
-                            className=""
+                            className={``}
                             onClick={() => handleClick(each)}
                         >
 
@@ -136,8 +131,10 @@ function Notes() {
                                 id={`${each.id}innerDiv`}
                                 onMouseEnter={() => mouseOverfn(true, each)}
                                 onMouseLeave={() => mouseOverfn(false, each)}
-                                className={`block border bg-[${each.color}] break-inside-avoid bg-[${each.color}] border-gray-200 w-full 
-                                 rounded-md h-fit  mx-1 p-3 mb-2 leading-tight tracking-tight transition-all rounded-scrollbar-container hover:shadow-md
+                                className={`
+                                    ${each.color === "white" ? `border bg-[${each.color}] ` : `bg-[${each.color}]`} bg-cover bg-center
+                                 block  break-inside-avoid  border-gray-200 w-full 
+                                 rounded-md h-fit  mx-1 p-3 mb-2 leading-tight tracking-tight transition-all  hover:shadow-md
                                  `}
                             >
                                 <p className="mb-3  text-black text-[1.200rem]">{each.Title}</p>
@@ -146,13 +143,12 @@ function Notes() {
                                 {/* all the icons are hear */}
                                 <div
                                     id={`${each.id}iconDiv`}
-                                    className={`flex mt-3 bg-[${each.color}] opacity-0 transition-all`} >
+                                    className={`flex mt-3 items-center justify-center bg-white rounded-md px-2 pt-1 opacity-0 transition-all`} >
                                     <div className="mr-5 ">
                                         <TooltipItem position="bottom" tooltipsText="Remind me">
                                             <Icon icon="bx:bell-plus" color="#4a5568" height={18} />
                                         </TooltipItem>
                                     </div>
-                                    {/* ############################################################################################ */}
                                     <div
                                         id='sakib'
                                         className="mr-5 relative"
@@ -162,9 +158,10 @@ function Notes() {
                                             <Icon icon="tabler:color-filter" color="#4a5568" height={18} />
                                         </TooltipItem>
 
-                                        {bgVisible ? (<BackgroundOptions  setNoteColor={setNoteColor} noteColor={noteColor}/>) : null}
+                                        {bgVisible ? (
+                                            <BackgroundOptions />
+                                        ) : null}
                                     </div>
-                                    {/* ############################################################################################ */}
                                     <div className="mr-5 ">
                                         <TooltipItem position="bottom" tooltipsText="Add image">
                                             <Icon icon="fluent:image-24-regular" color="#4a5568" height={18} />
@@ -177,9 +174,17 @@ function Notes() {
                                         </TooltipItem>
                                     </div>
 
-                                    <div className="  ">
+                                    <div
+                                        className="relative"
+                                        onClick={(event) => moreOptionButton(event)}
+                                    >
                                         <TooltipItem position="bottom" tooltipsText="More">
                                             <Icon icon="icon-park-outline:more-four" color="#4a5568" height={18} />
+
+                                            {moreListVisible ? (
+                                                <MoreOption />
+                                            ) : null}
+
                                         </TooltipItem>
                                     </div>
                                 </div>
@@ -188,7 +193,15 @@ function Notes() {
                     ))}
                 </div>
             </div>
-            {isPopupVisible && (<PopupCard ref={refForId} Title={cardTitle} Text={cardText} />)}
+            {isPopupVisible && (<PopupCard
+                ref={refForId}
+                Title={cardTitle}
+                Text={cardText}
+                Color={cardColor}
+                img={cardImg}
+                cardData={cardData}
+                handleOutsideClick={handleOutsideClick}
+            />)}
         </div>
     );
 }

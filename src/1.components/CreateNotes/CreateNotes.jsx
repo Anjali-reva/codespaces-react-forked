@@ -4,7 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateBoth, chooseColor } from '../../2.ReduxToolkit/Slice';
 import { nanoid } from '@reduxjs/toolkit';
 import TooltipItem from "../SupportingComponents/Tooltip";
-import BackgroundOptions from './BackgroundOptions';
+import BackgroundOptions from '../SupportingComponents/BackgroundOptions';
+import { img1 } from '../../img/img';
+
 
 
 function CreateNotes(props) {
@@ -21,19 +23,18 @@ function CreateNotes(props) {
 
     // For dispatching all the data and clear input field
     const submit = () => {
-        const note2 = {
+        dispatch(updateBoth({
             id: nanoid(),
             Title: input1Value,
             Text: input2Value,
             color: color,
-        }
-        dispatch(updateBoth(updateBoth(note2)))
-        // console.log(note2.color)
+        }))
         if (input1Value) setInput1Value('')
         if (input2Value) setInput2Value('')
         setColorValue('white')
         setIsEditing(false)
         dispatch(chooseColor('white'))
+        console.log(color);
     }
 
     // funcnality of click to show title and text input field (line: 30-43)
@@ -44,7 +45,10 @@ function CreateNotes(props) {
     const handleOutsideClick = (event) => {
         if (inputRef.current && !inputRef.current.contains(event.target)) {
             setIsEditing(false);
-            setBgVisible(false)
+            setBgVisible(false);
+            // setColorValue('white')
+            // dispatch(chooseColor('white'))
+            // dispatch(chooseImg('white'))
         }
 
     };
@@ -53,15 +57,14 @@ function CreateNotes(props) {
         document.addEventListener('mousedown', handleOutsideClick);
     }, []);
 
-    useEffect(() => {
-        setColorValue(color)
-    }, [color]);
+    // useEffect(() => {
 
     return (
         <div
             id='CreateNotes'
-            className=' bg-white  w-full  '>
-            <div className={`bg-[${colorValue}]  rounded-xl shadow-md border  justify-center transition-all
+            className='w-full '>
+            {/* bg-[${colorValue}] */}
+            <div className={`border-t bg-[${color}] bg-cover bg-center  rounded-xl shadow-md justify-center transition-all
                     sm:w-[75%] sm:m-auto
                     lg:w-[45%] lg:m-auto
                     w-[calc(100%-5rem)] ml-[2.8rem] mr-4
@@ -76,7 +79,7 @@ function CreateNotes(props) {
                                     type="text"
                                     id='input1'
                                     placeholder='Title'
-                                    className={`bg-[${colorValue}] transition-all font-semibold overflow-auto placeholder:text-gray-700 outline-none w-full`}
+                                    className={` bg-transparent transition-all font-semibold overflow-auto placeholder:text-gray-700 outline-none w-full`}
                                     value={input1Value}
                                     onChange={e => setInput1Value(e.target.value)}
                                 />
@@ -91,14 +94,14 @@ function CreateNotes(props) {
                                         value={input2Value}
                                         onChange={e => setInput2Value(e.target.value)}
                                         placeholder='Take a note...'
-                                        className={`my-4 font-sans overflow-auto placeholder:text-gray-600 outline-none w-full bg-[${colorValue}] transition-all`}
+                                        className={`my-4 font-sans overflow-auto placeholder:text-gray-600 outline-none w-full bg-transparent transition-all`}
                                     />
                                 </div>
 
                                 {/* All the icons are hear */}
-                                <div className='flex items-center'>
+                                <div className={`bg-white  border-gray-400 flex justify-center items-center rounded-lg mt-4 px-2 pt-1`}>
 
-                                    <div className='mr-7'>
+                                    <div className='mr-7    '>
                                         <TooltipItem position="bottom" tooltipsText="Remind me">
                                             <Icon icon="bx:bell-plus" color='#4a5568' height={18} />
                                         </TooltipItem>
@@ -132,10 +135,10 @@ function CreateNotes(props) {
                                         </TooltipItem>
                                     </div>
 
-                                    <div className=' w-[100%] flex justify-end'>
+                                    <div className=' w-[100%] flex  pb-1 justify-end'>
                                         <button
                                             onClick={() => submit()}
-                                            className={`bg-white font-semibold hover:bg-gray-100 rounded-md text-[#4a5568] px-2 bg-[${colorValue}] transition-all`}>
+                                            className={`bg-transparent font-semibold hover:bg-gray-100 rounded-md text-[#4a5568] px-2 transition-all`}>
                                             Save
                                         </button>
                                     </div>
@@ -150,7 +153,7 @@ function CreateNotes(props) {
                                 type="text"
                                 id='input1'
                                 placeholder='Title'
-                                className={`bg-[${colorValue}] transition-all font-semibold overflow-auto placeholder:text-gray-700 outline-none w-full`}
+                                className={`bg-transparent transition-all font-semibold overflow-auto placeholder:text-gray-700 outline-none w-full`}
                                 value={input1Value}
                                 onChange={e => setInput1Value(e.target.value)}
                             />
