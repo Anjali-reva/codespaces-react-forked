@@ -6,6 +6,8 @@ import { nanoid } from '@reduxjs/toolkit';
 import TooltipItem from "../SupportingComponents/Tooltip";
 import BackgroundOptions from '../SupportingComponents/BackgroundOptions';
 import { img1 } from '../../img/img';
+import AdjustableTextarea from '../../Test';
+
 
 
 
@@ -95,6 +97,9 @@ function CreateNotes(props) {
                                         onChange={e => setInput2Value(e.target.value)}
                                         placeholder='Take a note...'
                                         className={`my-4 font-sans overflow-auto placeholder:text-gray-600 outline-none w-full bg-transparent transition-all`}
+                                    />
+                                    <AdjustableTextarea 
+                                    className='my-4 font-sans overflow-auto placeholder:text-gray-600 outline-none w-full bg-transparent transition-all'
                                     />
                                 </div>
 

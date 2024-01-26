@@ -13,10 +13,10 @@ function App() {
 
   return (
     <Provider store={store}>
-      <Notes />
-      <LeftSideBar/>
-      <Header />
-      {/* <Test /> */}
+      {/* <Notes /> */}
+      {/* <LeftSideBar/> */}
+      {/* <Header /> */}
+      <Test />
     </Provider >
   );
 }

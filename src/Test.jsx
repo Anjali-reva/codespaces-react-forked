@@ -1,30 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const StateSelector = () => {
-    const [selectedState, setSelectedState] = useState(null);
+const AdjustableTextarea = ({ value,onchangeValue, className = '' }) => {
+    const [text, setText] = useState('');
+    const [textareaHeight, setTextareaHeight] = useState('');
 
-    const handleStateClick = (state) => {
-        setSelectedState(state);
-    };
+    useEffect(() => {
+        const textarea = document.getElementById('adjustable-textarea');
+        // text.length !== 0 ? setTextareaHeight(`${textarea.scrollHeight}px`) : setTextareaHeight(`${24}px`);
+        setTextareaHeight(`${textarea.scrollHeight}px`)
+        console.log(textarea.scrollHeight)
+    }, [text]);
 
     return (
-        <div>
-            {['State 1', 'State 2', 'State 3', 'State 4', 'State 5'].map((each, index) => (
-                <div
-                    key={index}
-                    onClick={() => handleStateClick(each)}
-                    style={{
-                        padding: '10px',
-                        margin: '5px',
-                        backgroundColor: selectedState == each ? 'lightblue' : 'white',
-                        cursor: 'pointer',
-                    }}
-                >
-                    {state}
-                </div>
-            ))}
-        </div>
+        <textarea
+            id="adjustable-textarea"
+            value={value}
+            onChange={onchangeValue}
+            placeholder='Take a note...'
+            style={{ height:textareaHeight, scrollbarWidth: 'none' }}
+            className={`${className} border outline-none resize-none`}
+        />
     );
 };
 
-export default StateSelector;
+export default AdjustableTextarea;

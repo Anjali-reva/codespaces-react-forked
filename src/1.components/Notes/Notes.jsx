@@ -51,7 +51,7 @@ function Notes() {
                 value.map((each) => {
                     // console.log(each.color)
                     if (each.id == every.id) {
-                        // console.log("match :: each.id is: " + each.id + ' | every.id is: ' + every.id + "each.color is: " + each.color);
+                        console.log("match :: each.id is: " + each.id + ' | every.id is: ' + every.id + "each.color is: " + each.color);
                         dispatch(idForColor(each.id))
                     }
                 })

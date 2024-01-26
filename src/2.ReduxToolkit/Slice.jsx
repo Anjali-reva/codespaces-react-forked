@@ -68,6 +68,17 @@ export const notesSlice = createSlice({
             state.id = action.payload
         },
 
+        chooseTitleAndText:(state,action)=>{
+            // payload = { id, Title, Text }
+            const payload = action.payload
+
+            state.clickValue.map((each)=>{
+                if(each.id == payload.id){
+                    each.Title = payload.Title
+                    each.Text = payload.Text
+                }
+            })
+        },
 
 
         deleteNote: (state, action) => {
@@ -85,6 +96,7 @@ export const {
     idForColor,
     chooseImg,
     ImgForNote,
+    chooseTitleAndText,
     deleteNote,
 } = notesSlice.actions;
 

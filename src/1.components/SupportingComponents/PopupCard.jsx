@@ -5,6 +5,7 @@ import TooltipItem from '../SupportingComponents/Tooltip'
 import BackgroundOptions from './BackgroundOptions';
 import { img1, img2, img3, img4 } from '../../img/img'
 import MoreOption from './MoreOption';
+import { chooseTitleAndText } from '../../2.ReduxToolkit/Slice';
 
 
 function PopupCard({ cardData, Title, Text, refForId, handleOutsideClick, Color }) {
@@ -13,17 +14,19 @@ function PopupCard({ cardData, Title, Text, refForId, handleOutsideClick, Color 
     const [moreOption, setmoreOption] = useState(false);
     const [cardText, setCardText] = useState('TEST :: this is a card');
     const [cardTitle, setCardTitle] = useState('TEST :: this is a card');
-    const [cardColor, setCardColor] = useState('white');
-    const [cardImg, setCardImg] = useState('white');
-    const [BgOption, setBgOption] = useState('white');
     const color = useSelector((state) => state.clickToShow.color)
-    const img = useSelector((state) => state.clickToShow.Img)
+    const dispatch = useDispatch()
 
 
 
     const closeBtnFn = () => {
         handleOutsideClick()
         setBgOptionVisible(false)
+        dispatch(chooseTitleAndText({
+            id: cardData.id,
+            Title: cardTitle,
+            Text: cardText
+        }))
     }
 
     const handleClickForAllOption = (index) => {
@@ -40,9 +43,9 @@ function PopupCard({ cardData, Title, Text, refForId, handleOutsideClick, Color 
     }
 
     useEffect(() => {
-
+        setCardTitle(cardData.Title)
+        setCardText(cardData.Text)
     }, [cardData])
-
     return (
         <div
             ref={refForId}
@@ -53,12 +56,23 @@ function PopupCard({ cardData, Title, Text, refForId, handleOutsideClick, Color 
             <div className=''>
                 <div className='text-xl mb-2 '>
 
-                    {cardData.Title}
+                    {/* {cardData.Title} */}
+                    <input
+                        type="text"
+                        value={cardTitle}
+                        onChange={(e) => setCardTitle(e.target.value)}
+                    />
 
                 </div>
 
                 <div className='text-gray-800 mb-11 overflow-y-auto'>
-                    {cardData.Text}
+                    {/* {cardData.Text} */}
+                    <input
+                        type="text"
+                        value={cardText}
+                        onChange={(e) => setCardText(e.target.value)}
+
+                    />
                 </div>
             </div>
 
