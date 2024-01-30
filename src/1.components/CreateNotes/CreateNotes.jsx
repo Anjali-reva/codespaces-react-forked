@@ -6,10 +6,9 @@ import { nanoid } from '@reduxjs/toolkit';
 import TooltipItem from "../SupportingComponents/Tooltip";
 import BackgroundOptions from '../SupportingComponents/BackgroundOptions';
 import { img1 } from '../../img/img';
-import AdjustableTextarea from '../../Test';
-
-
-
+import MoreOption from '../SupportingComponents/MoreOption';
+import AdjusInput from '../SupportingComponents/AdjusInput';
+AdjusInput
 
 function CreateNotes(props) {
 
@@ -21,7 +20,9 @@ function CreateNotes(props) {
     const [colorValue, setColorValue] = useState('')
     const [isEditing, setIsEditing] = useState(false);
     const [bgVisible, setBgVisible] = useState(false)
+    const [moreOption, setMoreOption] = useState(false)
     const inputRef = useRef();
+    const MoreOptionRef = useRef();
 
     // For dispatching all the data and clear input field
     const submit = () => {
@@ -45,15 +46,33 @@ function CreateNotes(props) {
     };
 
     const handleOutsideClick = (event) => {
-        if (inputRef.current && !inputRef.current.contains(event.target)) {
+        if (
+            (inputRef.current && !inputRef.current.contains(event.target))
+            ||
+            (MoreOptionRef.current && !MoreOptionRef.current.contains(event.target))
+        ) {
             setIsEditing(false);
             setBgVisible(false);
+            setMoreOption(false)
             // setColorValue('white')
             // dispatch(chooseColor('white'))
             // dispatch(chooseImg('white'))
         }
 
     };
+
+    const handleClickForAllOption = (index) => {
+        setBgVisible(false)
+        setMoreOption(false)
+
+        if (index == 1) {
+            bgVisible ? setBgVisible(false) : setBgVisible(true)
+        }
+        if (index == 2) {
+            moreOption ? setMoreOption(false) : setMoreOption(true)
+        }
+
+    }
 
     useEffect(() => {
         document.addEventListener('mousedown', handleOutsideClick);
@@ -90,17 +109,20 @@ function CreateNotes(props) {
                             {/* Body text is hear */}
                             <div>
                                 <div className={``}>
-                                    <input
+                                    {/* <input
                                         type="text"
                                         id='input2'
                                         value={input2Value}
                                         onChange={e => setInput2Value(e.target.value)}
                                         placeholder='Take a note...'
                                         className={`my-4 font-sans overflow-auto placeholder:text-gray-600 outline-none w-full bg-transparent transition-all`}
+                                    /> */}
+                                    <AdjusInput
+                                        value={input2Value}
+                                        onChangeValue={setInput2Value}
+                                        classname={`my-4 font-sans overflow-auto placeholder:text-gray-600 outline-none w-full bg-transparent transition-all`}
                                     />
-                                    <AdjustableTextarea 
-                                    className='my-4 font-sans overflow-auto placeholder:text-gray-600 outline-none w-full bg-transparent transition-all'
-                                    />
+
                                 </div>
 
                                 {/* All the icons are hear */}
@@ -112,8 +134,10 @@ function CreateNotes(props) {
                                         </TooltipItem>
                                     </div>
 
-                                    <div onClick={() => { !bgVisible ? setBgVisible(true) : setBgVisible(false) }} className='mr-7 relative'>
-
+                                    <div
+                                        onClick={() => handleClickForAllOption(1)}
+                                        className='mr-7 relative'
+                                    >
                                         {/* background options */}
                                         <TooltipItem position="bottom" tooltipsText="Background options">
                                             <Icon icon="tabler:color-filter" color='#4a5568' height={18} />
@@ -134,10 +158,17 @@ function CreateNotes(props) {
                                         </TooltipItem>
                                     </div>
 
-                                    <div className='mr-7'>
+                                    <div className='mr-7'
+                                        onClick={() => handleClickForAllOption(2)}
+                                    >
                                         <TooltipItem position="bottom" tooltipsText="More">
                                             <Icon icon="icon-park-outline:more-four" color='#4a5568' height={18} />
                                         </TooltipItem>
+                                        {/* {moreOption ? */}
+                                            <MoreOption />
+                                            {/* : null} */}
+
+
                                     </div>
 
                                     <div className=' w-[100%] flex  pb-1 justify-end'>

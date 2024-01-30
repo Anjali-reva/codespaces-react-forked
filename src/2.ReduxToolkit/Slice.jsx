@@ -6,7 +6,8 @@ const initialState = {
         Title: 'IT ENDS WITH US',
         Text: 'A book writen by Collen Hoover. it is very romentic book.',
         color: 'white',
-        Img: 'white'
+        Img: 'white',
+        label: 'html'
     }],
 
     // supporting states
@@ -22,6 +23,12 @@ const initialState = {
     Img: {
         Img: 'white'
     },
+    labels: [
+        { label: 'html' }
+    ],
+    toggleValue: [
+        { toggleValue: false }
+    ]
 }
 
 export const notesSlice = createSlice({
@@ -55,7 +62,7 @@ export const notesSlice = createSlice({
         chooseImg: (state, action) => {
             state.Img = action.payload
         },
-        
+
         ImgForNote: (state, action) => {
             state.clickValue.map((each) => {
                 if (each.id == action.payload) {
@@ -68,18 +75,26 @@ export const notesSlice = createSlice({
             state.id = action.payload
         },
 
-        chooseTitleAndText:(state,action)=>{
+        chooseTitleAndText: (state, action) => {
             // payload = { id, Title, Text }
             const payload = action.payload
 
-            state.clickValue.map((each)=>{
-                if(each.id == payload.id){
+            state.clickValue.map((each) => {
+                if (each.id == payload.id) {
                     each.Title = payload.Title
                     each.Text = payload.Text
                 }
             })
         },
+        toggleValue: (state, action) => {
+            const payload = action.payload
+            state.toggleValue = payload
+        },
 
+        addLabel: (state, action) => {
+            const payload = action.payload
+            state.labels.push(payload)
+        },
 
         deleteNote: (state, action) => {
             state.clickValue = state.clickValue.filter((each) => each.id !== action.payload)
@@ -98,6 +113,7 @@ export const {
     ImgForNote,
     chooseTitleAndText,
     deleteNote,
+    toggleValue,
 } = notesSlice.actions;
 
 export default notesSlice.reducer;

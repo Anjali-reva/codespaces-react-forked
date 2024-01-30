@@ -7,7 +7,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CreateNotes from '../CreateNotes/CreateNotes';
-import { idForColor, showCard } from '../../2.ReduxToolkit/Slice';
+import { idForColor, showCard, toggleValue } from '../../2.ReduxToolkit/Slice';
 import { Icon } from '@iconify/react';
 import PopupCard from '../SupportingComponents/PopupCard';
 import TooltipItem from '../SupportingComponents/Tooltip';
@@ -30,6 +30,7 @@ function Notes() {
     const [bgVisible, setBgVisible] = useState(false);
     const [moreListVisible, setMoreListVisible] = useState(false);
     const value = useSelector((state) => state.clickToShow.clickValue);
+    const toggleValue0 = useSelector((state) => state.clickToShow.toggleValue);
     const dispatch = useDispatch();
 
     const handleClick = (each) => {
@@ -39,7 +40,7 @@ function Notes() {
         setCardTitle(each.Title)
         setCardColor(each.color)
         setCardImg(each.Img)
-        console.log(each)
+        // console.log(each)
         setCardData(each)
         handleTriggerClick()
     };
@@ -73,19 +74,16 @@ function Notes() {
 
     // for Popup card
     const handleTriggerClick = () => {
-        setIsPopupVisible(true);
+        dispatchIdOnlick()
+        dispatch(toggleValue(true))
     };
 
     const handleOutsideClick = (event) => {
         // if (refForId.current && !refForId.current.some((ref) => ref && ref.contains(event.target))) {
-        //     setIsPopupVisible(false);
-        // }
-        setIsPopupVisible(false);
+        //     setIsPopupVisible(false);}
+        dispatch(toggleValue(false))
     };
 
-    useEffect(() => {
-        console.log(value)
-    }, [value])
 
     const mouseOverfn = (condition, each) => {
         if (condition) {
@@ -100,6 +98,11 @@ function Notes() {
 
     }
 
+    useEffect(() => {
+        dispatch(toggleValue(false))
+        dispatchIdOnlick()
+    }, [])
+
     return (
         <div
             id="NoteDiv"
@@ -108,7 +111,7 @@ function Notes() {
             <CreateNotes />
 
             <div
-                className={`w-full flex justify-center mt-6 px-10  ${isPopupVisible && 'opacity-20'} `}
+                className={`w-full flex justify-center mt-6 px-10  ${toggleValue0 && 'opacity-20'} `}
             >
                 <div
                     className={`w-fit columns-1 gap-x-2 auto-cols-min
@@ -193,14 +196,13 @@ function Notes() {
                     ))}
                 </div>
             </div>
-            {isPopupVisible && (<PopupCard
+            {toggleValue0 && (<PopupCard
                 ref={refForId}
                 Title={cardTitle}
                 Text={cardText}
                 Color={cardColor}
                 img={cardImg}
                 cardData={cardData}
-                handleOutsideClick={handleOutsideClick}
             />)}
         </div>
     );
