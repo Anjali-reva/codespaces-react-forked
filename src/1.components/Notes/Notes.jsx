@@ -27,6 +27,7 @@ function Notes() {
     const [cardImg, setCardImg] = useState('');
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [mouseOver, setMouseOver] = useState(false);
+    const [OnMHlabel, setOnMHlabel] = useState(false);
     const [bgVisible, setBgVisible] = useState(false);
     const [moreListVisible, setMoreListVisible] = useState(false);
     const value = useSelector((state) => state.clickToShow.clickValue);
@@ -98,6 +99,19 @@ function Notes() {
 
     }
 
+    const mouseOverfnForLabel = (condition, id) => {
+
+        if (condition) {
+            setOnMHlabel(true);
+            document.getElementById(`${id}closeBtn`).style.opacity = '100%'
+            document.getElementById(`${id}text`).style.opacity = '0%'
+        } else if (!condition) {
+            setOnMHlabel(false);
+            document.getElementById(`${id}closeBtn`).style.opacity = '0%'
+            document.getElementById(`${id}text`).style.opacity = '100%'
+        };
+
+    }
     useEffect(() => {
         dispatch(toggleValue(false))
         dispatchIdOnlick()
@@ -129,24 +143,58 @@ function Notes() {
                             className={``}
                             onClick={() => handleClick(each)}
                         >
-
                             <div
                                 id={`${each.id}innerDiv`}
                                 onMouseEnter={() => mouseOverfn(true, each)}
                                 onMouseLeave={() => mouseOverfn(false, each)}
                                 className={`
-                                    ${each.color === "white" ? `border bg-[${each.color}] ` : `bg-[${each.color}]`} bg-cover bg-center
+                                ${each.color === "white" ? `border bg-[${each.color}] ` : `bg-[${each.color}]`} bg-cover bg-center
                                  block  break-inside-avoid  border-gray-200 w-full 
                                  rounded-md h-fit  mx-1 p-3 mb-2 leading-tight tracking-tight transition-all  hover:shadow-md
                                  `}
                             >
+
                                 <p className="mb-3  text-black text-[1.200rem]">{each.Title}</p>
                                 <p className=''>{each.Text}</p>
+
+                                {/* labels goes hear */}
+                                <div className='flex flex-wrap mt-1 ' >
+                                    {each.label.map((each1) => {
+                                        if (each1.name) {
+                                            return (
+                                                <button
+                                                    key={each1.id}
+                                                    className='transition-all text-xs text-black/70 font-bold m-1 px-3   
+                                                    rounded-full bg-black/15 relative'
+                                                    value={each1.name}
+                                                    onMouseEnter={() => mouseOverfnForLabel(true, `${each1.id}`)}
+                                                    onMouseLeave={() => mouseOverfnForLabel(false, `${each1.id}`)}
+                                                >
+                                                    <div className='flex'>
+                                                        <div
+                                                            id={`${each1.id}text`}
+                                                            className={`transition-all py-1 opacity-100`}
+                                                        >
+                                                            {each1.name}
+                                                        </div>
+                                                        <div
+                                                            id={`${each1.id}closeBtn`}
+                                                            className={`transition-all opacity-0 absolute  right-0  p-1 mr-0 
+                                                            bg-transparent w-full text-center rounded-full`}
+                                                        >
+                                                            &#x2715;
+                                                        </div>
+                                                    </div>
+                                                </button>
+                                            )
+                                        }
+                                    })}
+                                </div>
 
                                 {/* all the icons are hear */}
                                 <div
                                     id={`${each.id}iconDiv`}
-                                    className={`flex mt-3 items-center justify-center bg-white rounded-md px-2 pt-1 opacity-0 transition-all`} >
+                                    className={`flex mt-1 items-center justify-center bg-white rounded-md px-2 pt-1 opacity-0 transition-all`} >
                                     <div className="mr-5 ">
                                         <TooltipItem position="bottom" tooltipsText="Remind me">
                                             <Icon icon="bx:bell-plus" color="#4a5568" height={18} />

@@ -14,30 +14,47 @@ function CreateNotes(props) {
 
     const dispatch = useDispatch()
     const color = useSelector((state) => state.clickToShow.color)
+    const labelArry = useSelector((state) => state.clickToShow.label);
+    const value = useSelector((state) => state.clickToShow.clickValue);
 
     const [input1Value, setInput1Value] = useState('')
     const [input2Value, setInput2Value] = useState('')
     const [colorValue, setColorValue] = useState('')
+    const [labelValue, setLabelValue] = useState([])
     const [isEditing, setIsEditing] = useState(false);
     const [bgVisible, setBgVisible] = useState(false)
     const [moreOption, setMoreOption] = useState(false)
+    const [onMouseHover, setOnMouseHover] = useState(false)
     const inputRef = useRef();
     const MoreOptionRef = useRef();
 
-    // For dispatching all the data and clear input field
+    // For dispatching all the data and clear input fields
+    useEffect(() => {
+        setLabelValue(labelArry)
+        console.log('saldgahlhr: ', labelValue);
+    }, [labelArry])
+
     const submit = () => {
+        const labels = []
+        labelArry.map((each) => {
+            if (each.isChecked) {
+                labels.push(each)
+            }
+        })
         dispatch(updateBoth({
             id: nanoid(),
             Title: input1Value,
             Text: input2Value,
             color: color,
+            label: labels,
         }))
+
+        dispatch(chooseColor('white'))
+        setColorValue('white')
+        setLabelValue([])
         if (input1Value) setInput1Value('')
         if (input2Value) setInput2Value('')
-        setColorValue('white')
         setIsEditing(false)
-        dispatch(chooseColor('white'))
-        console.log(color);
     }
 
     // funcnality of click to show title and text input field (line: 30-43)
@@ -73,10 +90,26 @@ function CreateNotes(props) {
         }
 
     }
+    const mouseOverfn = (condition, id) => {
 
+        if (condition) {
+            setOnMouseHover(true);
+            document.getElementById(`${id}closeBtn`).style.opacity = '100%'
+            document.getElementById(`${id}text`).style.opacity = '0%'
+        } else if (!condition) {
+            setOnMouseHover(false);
+            document.getElementById(`${id}closeBtn`).style.opacity = '0%'
+            document.getElementById(`${id}text`).style.opacity = '100%'
+        };
+
+    }
     useEffect(() => {
         document.addEventListener('mousedown', handleOutsideClick);
     }, []);
+
+    useEffect(() => {
+        labelArry
+    }, [labelArry]);
 
     // useEffect(() => {
 
@@ -124,7 +157,40 @@ function CreateNotes(props) {
                                     />
 
                                 </div>
+                                {/* labels goes hear */}
+                                <div>
+                                    {labelValue.map((each) => {
+                                        if (each.isChecked) {
+                                            return (
+                                                <button
+                                                    key={each.id}
+                                                    className='transition-all text-sm text-black/70 font-bold m-1 px-3  rounded-full bg-black/15 
+                                                    relative'
+                                                    value={each.name}
+                                                    onMouseEnter={() => mouseOverfn(true, `${each.id}`)}
+                                                    onMouseLeave={() => mouseOverfn(false, `${each.id}`)}
 
+                                                >
+                                                    <div className='flex'>
+                                                        <div
+                                                            id={`${each.id}text`}
+                                                            className={`transition-all py-1 opacity-100`}
+                                                        >
+                                                            {each.name}
+                                                        </div>
+                                                        <div
+                                                            id={`${each.id}closeBtn`}
+                                                            className={`transition-all opacity-0 absolute  right-0  p-1 mr-0 
+                                                            bg-transparent  w-full text-center rounded-full`}
+                                                        >
+                                                            &#x2715;
+                                                        </div>
+                                                    </div>
+                                                </button>
+                                            )
+                                        }
+                                    })}
+                                </div>
                                 {/* All the icons are hear */}
                                 <div className={`bg-white  border-gray-400 flex justify-center items-center rounded-lg mt-4 px-2 pt-1`}>
 
@@ -165,10 +231,8 @@ function CreateNotes(props) {
                                             <Icon icon="icon-park-outline:more-four" color='#4a5568' height={18} />
                                         </TooltipItem>
                                         {/* {moreOption ? */}
-                                            <MoreOption />
-                                            {/* : null} */}
-
-
+                                        <MoreOption />
+                                        {/* : null} */}
                                     </div>
 
                                     <div className=' w-[100%] flex  pb-1 justify-end'>

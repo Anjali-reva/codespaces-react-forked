@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteNote, toggleValue } from "../../2.ReduxToolkit/Slice";
-
+import { deleteNote, toggleValue, addLabel, handleCheckboxChange } from "../../2.ReduxToolkit/Slice";
 
 export default function MoreOption() {
 
     const [editlable, SetEditlable] = useState(false)
+    const [lableValue, SetLableValue] = useState('')
     const dispatch = useDispatch()
     const idForNote = useSelector((state => state.clickToShow.id))
     const toggleValue0 = useSelector((state) => state.clickToShow.toggleValue);
+    const labelArry = useSelector((state) => state.clickToShow.label);
+
 
     const deleteBtn = () => {
         dispatch(deleteNote(idForNote))
@@ -19,8 +21,20 @@ export default function MoreOption() {
         editlable ? SetEditlable(false) : SetEditlable(true)
 
     }
-    const addLabel = () => {
-        
+
+    const addLabelLocal = (e) => {
+        if (lableValue && !labelArry.some((each) => each.name === lableValue)) {
+            const labelID = labelArry.length + 1
+            dispatch(addLabel({
+                id: labelID,
+                name: lableValue,
+                isChecked: false
+            }))
+            SetLableValue('')
+        }
+        if (labelArry.some((each) => each.name === lableValue)) alert(`"${lableValue}" label is already exist.`)
+        // const cheked = labelArry.filter((each) => each.isChecked === true)
+        // console.log(cheked);
     }
 
     return (
@@ -43,41 +57,51 @@ export default function MoreOption() {
                             onClick={() => lableBtn()}
                             className={``}>Add label
                         </div>
-                        <div
+                        <button
                             onClick={() => lableBtn()}
-                            className={`${!editlable ? 'hidden' : 'block'}`}
+                            className={`${!editlable ? 'hidden' : 'block'} px-2`}
                         >
                             &#10005;
-                        </div>
+                        </button>
                     </div>
                     {editlable ? (
                         <div>
                             <div className="flex mt-2 ">
                                 <input
                                     type="text"
+                                    value={lableValue}
+                                    onKeyUp={(e) => e.key === 'Enter' ? addLabelLocal() : null}
+                                    onChange={(e) => SetLableValue(e.target.value)}
                                     placeholder="Enter label name"
                                     className="outline-none bg-transparent text-gray-700" />
 
-                                <button onClick={() => addLabel()} className="ml-4 mr-0">&#10003;</button>
+                                <button
+                                    onClick={() => addLabelLocal()}
+                                    className="ml-4 mr-0 px-2"
+                                >
+                                    &#10003;
+                                </button>
                             </div>
                             <div className="flex flex-col items-start mt-1">
-                                <label htmlFor="HTML" className=" text-[0.9rem] mb-1 cursor-pointer ">
-                                    <input type="checkbox" id="HTML" className="mr-2" />
-                                    HTML
-                                </label>
+                                {labelArry.map((each, index) => {
+                                    if (each.name) {
+                                        return (<li key={each.id}>
+                                            <label htmlFor={each.id}
+                                                className=" text-[0.9rem] mb-1 cursor-pointer "
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    id={each.id}
+                                                    value={each.name}
+                                                    checked={each.isChecked}
+                                                    onChange={() => dispatch(handleCheckboxChange(each.id))}
+                                                    className="mr-2 accent-gray-500" />
+                                                {each.name}
+                                            </label>
+                                        </li>)
+                                    }
+                                })}
 
-                                <label htmlFor="CSS" className=" text-[0.9rem] mb-1 ">
-                                    <input type="checkbox" id="CSS" className="mr-2" />
-                                    CSS
-                                </label>
-
-                                <label htmlFor="JavaScript" className=" text-[0.9rem] mb-1 ">
-                                    <input type="checkbox" id="JavaScript" className="mr-2" />
-                                    JavaScript
-                                </label>
-                                <label htmlFor="CSS" className=" text-[0.9rem] mb-1 ">
-                                    <input type="checkbox" id="CSS" className="mr-2" />JavaScript
-                                </label>
                             </div>
                         </div>
                     ) : null}

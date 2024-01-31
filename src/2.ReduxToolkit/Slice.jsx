@@ -7,7 +7,9 @@ const initialState = {
         Text: 'A book writen by Collen Hoover. it is very romentic book.',
         color: 'white',
         Img: 'white',
-        label: 'html'
+        label: [
+            { id: 1, name: "", isChecked: true }
+        ]
     }],
 
     // supporting states
@@ -23,8 +25,8 @@ const initialState = {
     Img: {
         Img: 'white'
     },
-    labels: [
-        { label: 'html' }
+    label: [
+        { id: 1, name: "", isChecked: false }
     ],
     toggleValue: [
         { toggleValue: false }
@@ -92,8 +94,17 @@ export const notesSlice = createSlice({
         },
 
         addLabel: (state, action) => {
+
             const payload = action.payload
-            state.labels.push(payload)
+            state.label.push(payload)
+            console.log(payload);
+        },
+
+        handleCheckboxChange: (state, action) => {
+            const id = action.payload
+            state.label.map((each) => {
+                each.id === id ? each.isChecked = !each.isChecked : each
+            })
         },
 
         deleteNote: (state, action) => {
@@ -112,6 +123,8 @@ export const {
     chooseImg,
     ImgForNote,
     chooseTitleAndText,
+    addLabel,
+    handleCheckboxChange,
     deleteNote,
     toggleValue,
 } = notesSlice.actions;
