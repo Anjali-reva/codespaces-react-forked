@@ -1,14 +1,14 @@
 import React, { forwardRef, useEffect, useState, useRef } from 'react'
 import { Icon } from '@iconify/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateBoth, chooseColor } from '../../2.ReduxToolkit/Slice';
+import { updateBoth, chooseColor, deleteLabels } from '../../2.ReduxToolkit/Slice';
 import { nanoid } from '@reduxjs/toolkit';
 import TooltipItem from "../SupportingComponents/Tooltip";
 import BackgroundOptions from '../SupportingComponents/BackgroundOptions';
 import { img1 } from '../../img/img';
 import MoreOption from '../SupportingComponents/MoreOption';
 import AdjusInput from '../SupportingComponents/AdjusInput';
-AdjusInput
+
 
 function CreateNotes(props) {
 
@@ -29,10 +29,7 @@ function CreateNotes(props) {
     const MoreOptionRef = useRef();
 
     // For dispatching all the data and clear input fields
-    useEffect(() => {
-        setLabelValue(labelArry)
-        console.log('saldgahlhr: ', labelValue);
-    }, [labelArry])
+
 
     const submit = () => {
         const labels = []
@@ -108,8 +105,9 @@ function CreateNotes(props) {
     }, []);
 
     useEffect(() => {
-        labelArry
-    }, [labelArry]);
+        setLabelValue(labelArry)
+        console.log('lableValue: ', labelValue);
+    }, [labelArry, labelValue])
 
     // useEffect(() => {
 
@@ -160,7 +158,7 @@ function CreateNotes(props) {
                                 {/* labels goes hear */}
                                 <div>
                                     {labelValue.map((each) => {
-                                        if (each.isChecked) {
+                                        if (each && each.isChecked) {
                                             return (
                                                 <button
                                                     key={each.id}
@@ -169,7 +167,7 @@ function CreateNotes(props) {
                                                     value={each.name}
                                                     onMouseEnter={() => mouseOverfn(true, `${each.id}`)}
                                                     onMouseLeave={() => mouseOverfn(false, `${each.id}`)}
-
+                                                    onClick={() => dispatch(deleteLabels({ id: each.id, for: 'createNote' }))}
                                                 >
                                                     <div className='flex'>
                                                         <div
@@ -231,7 +229,7 @@ function CreateNotes(props) {
                                             <Icon icon="icon-park-outline:more-four" color='#4a5568' height={18} />
                                         </TooltipItem>
                                         {/* {moreOption ? */}
-                                        <MoreOption />
+                                        <MoreOption for1={'createNote'} noteID={null}/>
                                         {/* : null} */}
                                     </div>
 

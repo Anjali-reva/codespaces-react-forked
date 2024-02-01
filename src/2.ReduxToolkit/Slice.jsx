@@ -8,7 +8,7 @@ const initialState = {
         color: 'white',
         Img: 'white',
         label: [
-            { id: 1, name: "", isChecked: true }
+            { id: '1', name: "", isChecked: false }
         ]
     }],
 
@@ -101,15 +101,73 @@ export const notesSlice = createSlice({
         },
 
         handleCheckboxChange: (state, action) => {
-            const id = action.payload
-            state.label.map((each) => {
-                each.id === id ? each.isChecked = !each.isChecked : each
-            })
+            //payload has id and noteID and for
+            const payload = action.payload
+
+            if (payload.for === 'note') {
+                state.clickValue.forEach((eachO) => {
+                    if (eachO.id === payload.noteID) {
+                        eachO.label = state.label;
+                        state.label.map((each) => {
+                            each && each.id === payload.id ? each.isChecked = !each.isChecked : each;
+                            eachO.label = state.label;
+                        })
+                        return;
+                    }
+                });
+            } else {
+                state.label.map((each) => {
+                    each && each.id === payload.id ? each.isChecked = !each.isChecked : each
+                })
+            }
+        },
+
+        // deleteLabels: (state, action) => {
+        //     // action.payload has 'id', 'noteID' and 'for' 
+        //     const payload = action.payload
+        //     if (payload.for == "createNote") {
+        //         state.label.map((each) => {
+        //             if (each && each.id === payload.id) {
+        //                 each.isChecked = !each.isChecked
+        //             }
+        //         })
+        //     }
+        //     if (payload.for == 'notes') {
+        //         state.clickValue.map((eachO) => {
+        //             if (eachO.id = payload.noteID) {
+        //                 eachO.label.filter((each) => each.isChecked = false)
+        //             }
+        //         })
+        //     }
+        //     console.log(payload);
+        // },
+
+        deleteLabels: (state, action) => {
+            const payload = action.payload;
+            if (payload.for === "createNote") {
+                state.label.forEach((each) => {
+                    if (each && each.id === payload.id) {
+                        each.isChecked = !each.isChecked;
+                    }
+                });
+            }
+            if (payload.for === 'notes') {
+                state.clickValue.forEach((eachO) => {
+                    if (eachO.id === payload.noteID) {
+                        eachO.label.forEach((each) => {
+                            if (each.id === payload.id) {
+                                each.isChecked = !each.isChecked
+                            }
+                        }
+                        );
+                        return;
+                    }
+                });
+            }
         },
 
         deleteNote: (state, action) => {
             state.clickValue = state.clickValue.filter((each) => each.id !== action.payload)
-
         }
     }
 });
@@ -125,6 +183,7 @@ export const {
     chooseTitleAndText,
     addLabel,
     handleCheckboxChange,
+    deleteLabels,
     deleteNote,
     toggleValue,
 } = notesSlice.actions;

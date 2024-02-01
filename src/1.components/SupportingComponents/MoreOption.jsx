@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteNote, toggleValue, addLabel, handleCheckboxChange } from "../../2.ReduxToolkit/Slice";
+import { nanoid } from "@reduxjs/toolkit";
 
-export default function MoreOption() {
+export default function MoreOption({ for1, noteID }) {
 
     const [editlable, SetEditlable] = useState(false)
     const [lableValue, SetLableValue] = useState('')
@@ -19,26 +20,22 @@ export default function MoreOption() {
 
     const lableBtn = () => {
         editlable ? SetEditlable(false) : SetEditlable(true)
-
     }
 
     const addLabelLocal = (e) => {
-        if (lableValue && !labelArry.some((each) => each.name === lableValue)) {
-            const labelID = labelArry.length + 1
+        if (lableValue && !labelArry.some((each) => each && each.name === lableValue)) {
+            // const labelID = nanoid()
             dispatch(addLabel({
-                id: labelID,
+                id: nanoid(),
                 name: lableValue,
                 isChecked: false
             }))
             SetLableValue('')
         }
-        if (labelArry.some((each) => each.name === lableValue)) alert(`"${lableValue}" label is already exist.`)
-        // const cheked = labelArry.filter((each) => each.isChecked === true)
-        // console.log(cheked);
     }
 
     return (
-        <div className="absolute transition-all z-40 w-fit shadow-md">
+        <div className="absolute transition-all z-40 w-56 shadow-md">
 
             <ul className="border  text-left  rounded bg-white ">
                 {!editlable ? (
@@ -48,6 +45,7 @@ export default function MoreOption() {
                     >
                         Delete note
                     </li>) : null}
+
                 <li
                     className={` py-2 px-4 ${!editlable ? 'hover:bg-gray-100' : null}  text-gray-900 leading-tight tracking-tight transition-all cursor-pointer`}
                     onClick={() => !editlable ? SetEditlable(true) : null}
@@ -73,7 +71,7 @@ export default function MoreOption() {
                                     onKeyUp={(e) => e.key === 'Enter' ? addLabelLocal() : null}
                                     onChange={(e) => SetLableValue(e.target.value)}
                                     placeholder="Enter label name"
-                                    className="outline-none bg-transparent text-gray-700" />
+                                    className="outline-none w-[80%] bg-transparent text-gray-700" />
 
                                 <button
                                     onClick={() => addLabelLocal()}
@@ -84,7 +82,7 @@ export default function MoreOption() {
                             </div>
                             <div className="flex flex-col items-start mt-1">
                                 {labelArry.map((each, index) => {
-                                    if (each.name) {
+                                    if (each && each.name) {
                                         return (<li key={each.id}>
                                             <label htmlFor={each.id}
                                                 className=" text-[0.9rem] mb-1 cursor-pointer "
@@ -94,8 +92,13 @@ export default function MoreOption() {
                                                     id={each.id}
                                                     value={each.name}
                                                     checked={each.isChecked}
-                                                    onChange={() => dispatch(handleCheckboxChange(each.id))}
-                                                    className="mr-2 accent-gray-500" />
+                                                    onChange={() => dispatch(handleCheckboxChange({
+                                                        id: each.id,
+                                                        noteID: noteID,
+                                                        for: for1
+                                                    }))}
+                                                    className="mr-2 accent-gray-500"
+                                                />
                                                 {each.name}
                                             </label>
                                         </li>)
@@ -106,6 +109,7 @@ export default function MoreOption() {
                         </div>
                     ) : null}
                 </li>
+
                 {!editlable ? (
                     <li
                         className=" mb-1 py-2 px-4 hover:bg-gray-100  text-gray-900 leading-tight tracking-tight transition-all">
