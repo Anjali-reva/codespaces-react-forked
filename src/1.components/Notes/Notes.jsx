@@ -1,9 +1,3 @@
-// // removeTodo: (state, action) => {
-// //     state.todos = state.todos.filter((todo) => todo.id !== action.payload )
-// // },
-
-// // onClick={() => dispatch(removeTodo(todo.id))}
-
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CreateNotes from '../CreateNotes/CreateNotes';
@@ -14,13 +8,10 @@ import TooltipItem from '../SupportingComponents/Tooltip';
 import BackgroundOptions from '../SupportingComponents/BackgroundOptions';
 // import { img1 } from '../../img/img';
 import MoreOption from '../SupportingComponents/MoreOption';
-import ClickOutsideComponent from '../../Test';
-
-
 
 function Notes() {
 
-    const refForId = useRef([]);
+
     const [cardText, setCardText] = useState('');
     const [cardData, setCardData] = useState({});
     const [cardTitle, setCardTitle] = useState('');
@@ -32,6 +23,11 @@ function Notes() {
     const [moreListVisible, setMoreListVisible] = useState(false);
     const value = useSelector((state) => state.clickToShow.clickValue);
     const toggleValue0 = useSelector((state) => state.clickToShow.toggleValue);
+    const [id, setid] = useState('');
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+
+    const refForId = useRef([]);
+
     const dispatch = useDispatch();
 
     const handleClick = (each) => {
@@ -53,7 +49,7 @@ function Notes() {
                 value.map((each) => {
                     // console.log(each.color)
                     if (each.id == every.id) {
-                        // console.log("match :: each.id is: " + each.id + ' | every.id is: ' + every.id + "each.color is: " + each.color);
+                        console.log("match :: each.id is: " + each.id + ' | every.id is: ' + every.id + "each.color is: " + each.color);
                         dispatch(idForColor(each.id))
                     }
                 })
@@ -63,14 +59,23 @@ function Notes() {
 
     const BGOptionButton = (event) => {
         event.stopPropagation()
-        !bgVisible ? setBgVisible(true) : setBgVisible(false)
+        const rect = event.target.getBoundingClientRect();
+        const x = rect.left - 100;
+        const y = rect.top + 20;
+        setPosition({ x, y })
+        setBgVisible(true)
         dispatchIdOnlick()
     }
 
-    const moreOptionButton = (event) => {
+    const moreOptionButton = (event, id) => {
         event.stopPropagation()
-        // !moreListVisible ? setMoreListVisible(true) : setMoreListVisible(false)
+        const rect = event.target.getBoundingClientRect();
+        const x = rect.left;
+        const y = rect.top + 20;
+        setPosition({ x, y })
+        // setMoreListVisible(!moreListVisible)
         setMoreListVisible(true)
+        setid(id)
         dispatchIdOnlick()
     }
 
@@ -80,25 +85,32 @@ function Notes() {
         dispatch(toggleValue(true))
     };
 
-    const handleOutsideClick = (event) => {
-        // if (refForId.current && !refForId.current.some((ref) => ref && ref.contains(event.target))) {
-        //     setIsPopupVisible(false);}
-        dispatch(toggleValue(false))
-    };
-
-
+    // Updates mouseOover state and set the opacity of an iconDiv based on conditions.
     const mouseOverfn = (condition, each) => {
-        if (condition) {
+        setid(each.id);
+
+        const isVisible = (bgVisible || moreListVisible);
+        if (!isVisible && condition) {
             setMouseOver(true);
             document.getElementById(`${each.id}iconDiv`).style.opacity = '100%'
-        } else if (moreListVisible && !condition) {
+
+        } if (isVisible && condition) {
+            setMouseOver(true);
+            document.getElementById(`${each.id}iconDiv`).style.opacity = '100%'
+
+        } if (isVisible && !condition) {
+            setMouseOver(true);
+            document.getElementById(`${each.id}iconDiv`).style.opacity = '100%'
+
+        } if (!isVisible && !condition) {
             setMouseOver(false);
             document.getElementById(`${each.id}iconDiv`).style.opacity = '0%'
-            setBgVisible(false)
-            setMoreListVisible(false)
+
         };
 
     }
+
+
 
     const mouseOverfnForLabel = (condition, id) => {
 
@@ -129,12 +141,69 @@ function Notes() {
         dispatchIdOnlick()
     }, [])
 
+    // Manages the visibility of <BackgroundOptions /> and <MoreOption /> components.
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (!event.target.closest('#moreOptionParent')) {
+                setMoreListVisible(false);
+            }
+            if (!event.target.closest('#BgOptionParent')) {
+                setBgVisible(false);
+            }
+        };
+
+        const handleOpacityChange = () => {
+            const visibility = moreListVisible || bgVisible;
+            const opacity = visibility ? '100%' : '0%';
+
+            value.forEach((each) => {
+                document.getElementById(`${each.id}iconDiv`).style.opacity = opacity;
+            });
+        };
+
+        handleOpacityChange();
+
+        document.addEventListener('mousedown', handleOutsideClick);
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, [moreListVisible, bgVisible, value]);
+
+
     return (
+
         <div
             id="NoteDiv"
             className={`w-[calc(100%-4rem)] h-screen bigdiv ml-16 mt-24 `}
         >
             <CreateNotes />
+
+            {bgVisible ? (
+                <div
+                    id='BgOptionParent'
+                    style={{
+                        position: "absolute",
+                        top: position.y + "px",
+                        left: position.x + "px",
+                    }}
+                >
+                    <BackgroundOptions />
+                </div>
+            ) : null}
+
+            {moreListVisible ? (
+                <div
+                    id='moreOptionParent'
+                    style={{
+                        position: "absolute",
+                        top: position.y + "px",
+                        left: position.x + "px",
+                    }}
+                >
+                    <MoreOption for1={"note"} noteID={id} />
+                </div>
+            ) : null}
+
 
             <div
                 className={`w-full flex justify-center mt-6 px-10  ${toggleValue0 && 'opacity-20'} `}
@@ -165,7 +234,6 @@ function Notes() {
                                  rounded-md h-fit  mx-1 p-3 mb-2 leading-tight tracking-tight transition-all  hover:shadow-md
                                  `}
                             >
-
                                 <p className="mb-3  text-black text-[1.200rem]">{each.Title}</p>
                                 <p className=''>{each.Text}</p>
 
@@ -208,7 +276,8 @@ function Notes() {
                                 {/* all the icons are hear */}
                                 <div
                                     id={`${each.id}iconDiv`}
-                                    className={`flex mt-1 items-center justify-center bg-white rounded-md px-2 pt-1 opacity-0 transition-all`} >
+                                    className={`amazingIconDiv flex mt-1 items-center justify-center bg-white rounded-md px-2 pt-1 opacity-0 transition-all
+                                    `} >
                                     <div className="mr-5 ">
                                         <TooltipItem position="bottom" tooltipsText="Remind me">
                                             <Icon icon="bx:bell-plus" color="#4a5568" height={18} />
@@ -222,10 +291,6 @@ function Notes() {
                                         <TooltipItem position="bottom" tooltipsText="Background options">
                                             <Icon icon="tabler:color-filter" color="#4a5568" height={18} />
                                         </TooltipItem>
-
-                                        {bgVisible ? (
-                                            <BackgroundOptions />
-                                        ) : null}
                                     </div>
                                     <div className="mr-5 ">
                                         <TooltipItem position="bottom" tooltipsText="Add image">
@@ -239,13 +304,10 @@ function Notes() {
                                         </TooltipItem>
                                     </div>
 
-                                    <div className="relative" onClick={(event) => moreOptionButton(event)}>
+                                    <div id={`${each.id}moreOptionDiv`} className="relative" onClick={(event) => moreOptionButton(event, each.id)}>
                                         <TooltipItem position="bottom" tooltipsText="More">
                                             <Icon icon="icon-park-outline:more-four" color="#4a5568" height={18} />
                                         </TooltipItem>
-                                        {moreListVisible ? (
-                                            <MoreOption for1={'note'} noteID={each.id} />
-                                        ):null}
                                     </div>
                                 </div>
                             </div>
@@ -266,3 +328,4 @@ function Notes() {
 }
 
 export default Notes;
+

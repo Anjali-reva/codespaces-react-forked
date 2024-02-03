@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import Test from './Test';
 import { useState } from 'react';
 
+
 function App() {
 
   const [first, setfirst] = useState('first value')
@@ -16,7 +17,7 @@ function App() {
       <Notes />
       <LeftSideBar/>
       <Header />
-      <Test />
+      {/* <Test /> */}
     </Provider >
   );
 }

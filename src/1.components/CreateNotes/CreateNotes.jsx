@@ -8,6 +8,7 @@ import BackgroundOptions from '../SupportingComponents/BackgroundOptions';
 import { img1 } from '../../img/img';
 import MoreOption from '../SupportingComponents/MoreOption';
 import AdjusInput from '../SupportingComponents/AdjusInput';
+import AddImg from '../SupportingComponents/AddImg';
 
 
 function CreateNotes(props) {
@@ -60,11 +61,7 @@ function CreateNotes(props) {
     };
 
     const handleOutsideClick = (event) => {
-        if (
-            (inputRef.current && !inputRef.current.contains(event.target))
-            ||
-            (MoreOptionRef.current && !MoreOptionRef.current.contains(event.target))
-        ) {
+        if (inputRef.current && !inputRef.current.contains(event.target)) {
             setIsEditing(false);
             setBgVisible(false);
             setMoreOption(false)
@@ -72,7 +69,12 @@ function CreateNotes(props) {
             // dispatch(chooseColor('white'))
             // dispatch(chooseImg('white'))
         }
-
+        if (event.target && !event.target.closest('#MoreOptionForCreateNote')) {
+            setMoreOption(false)
+        }
+        if (event.target && !event.target.closest('#BgOptionForCreateNote')) {
+            setBgVisible(false)
+        }
     };
 
     const handleClickForAllOption = (index) => {
@@ -80,10 +82,10 @@ function CreateNotes(props) {
         setMoreOption(false)
 
         if (index == 1) {
-            bgVisible ? setBgVisible(false) : setBgVisible(true)
+            setBgVisible(true)
         }
         if (index == 2) {
-            moreOption ? setMoreOption(false) : setMoreOption(true)
+            setMoreOption(true)
         }
 
     }
@@ -206,14 +208,19 @@ function CreateNotes(props) {
                                         <TooltipItem position="bottom" tooltipsText="Background options">
                                             <Icon icon="tabler:color-filter" color='#4a5568' height={18} />
                                         </TooltipItem>
-                                        {bgVisible ? (<BackgroundOptions />) : null}
+                                        {bgVisible ? (
+                                            <div id='BgOptionForCreateNote'>
+                                                <BackgroundOptions />
+                                            </div>
+                                        ) : null}
 
                                     </div>
 
-                                    <div className='mr-7'>
+                                    <div className='mr-7 relative'>
                                         <TooltipItem position="bottom" tooltipsText="Add image">
                                             <Icon icon="fluent:image-24-regular" color='#4a5568' height={18} />
                                         </TooltipItem>
+                                        <AddImg/>
                                     </div>
 
                                     <div className='mr-7'>
@@ -228,9 +235,11 @@ function CreateNotes(props) {
                                         <TooltipItem position="bottom" tooltipsText="More">
                                             <Icon icon="icon-park-outline:more-four" color='#4a5568' height={18} />
                                         </TooltipItem>
-                                        {/* {moreOption ? */}
-                                        <MoreOption for1={'createNote'} noteID={null}/>
-                                        {/* : null} */}
+                                        {moreOption ?
+                                            <div id='MoreOptionForCreateNote'>
+                                                <MoreOption for1={'createNote'} noteID={null} />
+                                            </div>
+                                            : null}
                                     </div>
 
                                     <div className=' w-[100%] flex  pb-1 justify-end'>

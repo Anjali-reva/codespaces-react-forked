@@ -150,7 +150,7 @@ function PopupCard({ cardData, Title, Text, refForId, Color }) {
             {/* div for icons */}
             <div
                 style={{ left: '1.3%' }}
-                className={`bg-transparent absolute bottom-0  rounded-md w-[97.5%]
+                className={`bg-white absolute bottom-0  rounded-md w-[97.5%]
             flex justify-center items-center
             py-1 my-2 
             `}

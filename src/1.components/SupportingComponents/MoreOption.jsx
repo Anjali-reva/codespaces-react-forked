@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, forwardRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteNote, toggleValue, addLabel, handleCheckboxChange } from "../../2.ReduxToolkit/Slice";
 import { nanoid } from "@reduxjs/toolkit";
 
-export default function MoreOption({ for1, noteID }) {
+function MoreOption({ for1, noteID }) {
 
     const [editlable, SetEditlable] = useState(false)
     const [lableValue, SetLableValue] = useState('')
@@ -35,7 +35,9 @@ export default function MoreOption({ for1, noteID }) {
     }
 
     return (
-        <div className="absolute transition-all z-40 w-56 shadow-md">
+        <div
+            className="absolute transition-all z-40 w-56 shadow-md"
+        >
 
             <ul className="border  text-left  rounded bg-white ">
                 {!editlable ? (
@@ -53,10 +55,10 @@ export default function MoreOption({ for1, noteID }) {
                     <div className="flex justify-between">
                         <div
                             onClick={() => lableBtn()}
-                            className={``}>Add label
+                            className={``}>
+                            Add label
                         </div>
                         <button
-                            onClick={() => lableBtn()}
                             className={`${!editlable ? 'hidden' : 'block'} px-2`}
                         >
                             &#10005;
@@ -121,3 +123,4 @@ export default function MoreOption({ for1, noteID }) {
         </div >
     )
 }
+export default MoreOption;
