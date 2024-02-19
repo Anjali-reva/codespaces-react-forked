@@ -1,40 +1,58 @@
 import React, { forwardRef, useEffect, useState, useRef } from 'react'
 import { Icon } from '@iconify/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateBoth, chooseColor } from '../../2.ReduxToolkit/Slice';
+import { updateBoth, chooseColor, deleteLabels } from '../../2.ReduxToolkit/Slice';
 import { nanoid } from '@reduxjs/toolkit';
 import TooltipItem from "../SupportingComponents/Tooltip";
 import BackgroundOptions from '../SupportingComponents/BackgroundOptions';
 import { img1 } from '../../img/img';
-
+import MoreOption from '../SupportingComponents/MoreOption';
+import AdjusInput from '../SupportingComponents/AdjusInput';
+import AddImg from '../SupportingComponents/AddImg';
 
 
 function CreateNotes(props) {
 
     const dispatch = useDispatch()
     const color = useSelector((state) => state.clickToShow.color)
+    const labelArry = useSelector((state) => state.clickToShow.label);
+    const value = useSelector((state) => state.clickToShow.clickValue);
 
     const [input1Value, setInput1Value] = useState('')
     const [input2Value, setInput2Value] = useState('')
     const [colorValue, setColorValue] = useState('')
+    const [labelValue, setLabelValue] = useState([])
     const [isEditing, setIsEditing] = useState(false);
     const [bgVisible, setBgVisible] = useState(false)
+    const [moreOption, setMoreOption] = useState(false)
+    const [onMouseHover, setOnMouseHover] = useState(false)
     const inputRef = useRef();
+    const MoreOptionRef = useRef();
 
-    // For dispatching all the data and clear input field
+    // For dispatching all the data and clear input fields
+
+
     const submit = () => {
+        const labels = []
+        labelArry.map((each) => {
+            if (each.isChecked) {
+                labels.push(each)
+            }
+        })
         dispatch(updateBoth({
             id: nanoid(),
             Title: input1Value,
             Text: input2Value,
             color: color,
+            label: labels,
         }))
+
+        dispatch(chooseColor('white'))
+        setColorValue('white')
+        setLabelValue([])
         if (input1Value) setInput1Value('')
         if (input2Value) setInput2Value('')
-        setColorValue('white')
         setIsEditing(false)
-        dispatch(chooseColor('white'))
-        console.log(color);
     }
 
     // funcnality of click to show title and text input field (line: 30-43)
@@ -46,16 +64,52 @@ function CreateNotes(props) {
         if (inputRef.current && !inputRef.current.contains(event.target)) {
             setIsEditing(false);
             setBgVisible(false);
+            setMoreOption(false)
             // setColorValue('white')
             // dispatch(chooseColor('white'))
             // dispatch(chooseImg('white'))
         }
-
+        if (event.target && !event.target.closest('#MoreOptionForCreateNote')) {
+            setMoreOption(false)
+        }
+        if (event.target && !event.target.closest('#BgOptionForCreateNote')) {
+            setBgVisible(false)
+        }
     };
 
+    const handleClickForAllOption = (index) => {
+        setBgVisible(false)
+        setMoreOption(false)
+
+        if (index == 1) {
+            setBgVisible(true)
+        }
+        if (index == 2) {
+            setMoreOption(true)
+        }
+
+    }
+    const mouseOverfn = (condition, id) => {
+
+        if (condition) {
+            setOnMouseHover(true);
+            document.getElementById(`${id}closeBtn`).style.opacity = '100%'
+            document.getElementById(`${id}text`).style.opacity = '0%'
+        } else if (!condition) {
+            setOnMouseHover(false);
+            document.getElementById(`${id}closeBtn`).style.opacity = '0%'
+            document.getElementById(`${id}text`).style.opacity = '100%'
+        };
+
+    }
     useEffect(() => {
         document.addEventListener('mousedown', handleOutsideClick);
     }, []);
+
+    useEffect(() => {
+        setLabelValue(labelArry)
+        console.log('lableValue: ', labelValue);
+    }, [labelArry, labelValue])
 
     // useEffect(() => {
 
@@ -88,16 +142,55 @@ function CreateNotes(props) {
                             {/* Body text is hear */}
                             <div>
                                 <div className={``}>
-                                    <input
+                                    {/* <input
                                         type="text"
                                         id='input2'
                                         value={input2Value}
                                         onChange={e => setInput2Value(e.target.value)}
                                         placeholder='Take a note...'
                                         className={`my-4 font-sans overflow-auto placeholder:text-gray-600 outline-none w-full bg-transparent transition-all`}
+                                    /> */}
+                                    <AdjusInput
+                                        value={input2Value}
+                                        onChangeValue={setInput2Value}
+                                        classname={`my-4 font-sans overflow-auto placeholder:text-gray-600 outline-none w-full bg-transparent transition-all`}
                                     />
-                                </div>
 
+                                </div>
+                                {/* labels goes hear */}
+                                <div>
+                                    {labelValue.map((each) => {
+                                        if (each && each.isChecked) {
+                                            return (
+                                                <button
+                                                    key={each.id}
+                                                    className='transition-all text-sm text-black/70 font-bold m-1 px-3  rounded-full bg-black/15 
+                                                    relative'
+                                                    value={each.name}
+                                                    onMouseEnter={() => mouseOverfn(true, `${each.id}`)}
+                                                    onMouseLeave={() => mouseOverfn(false, `${each.id}`)}
+                                                    onClick={() => dispatch(deleteLabels({ id: each.id, for: 'createNote' }))}
+                                                >
+                                                    <div className='flex'>
+                                                        <div
+                                                            id={`${each.id}text`}
+                                                            className={`transition-all py-1 opacity-100`}
+                                                        >
+                                                            {each.name}
+                                                        </div>
+                                                        <div
+                                                            id={`${each.id}closeBtn`}
+                                                            className={`transition-all opacity-0 absolute  right-0  p-1 mr-0 
+                                                            bg-transparent  w-full text-center rounded-full`}
+                                                        >
+                                                            &#x2715;
+                                                        </div>
+                                                    </div>
+                                                </button>
+                                            )
+                                        }
+                                    })}
+                                </div>
                                 {/* All the icons are hear */}
                                 <div className={`bg-white  border-gray-400 flex justify-center items-center rounded-lg mt-4 px-2 pt-1`}>
 
@@ -107,20 +200,27 @@ function CreateNotes(props) {
                                         </TooltipItem>
                                     </div>
 
-                                    <div onClick={() => { !bgVisible ? setBgVisible(true) : setBgVisible(false) }} className='mr-7 relative'>
-
+                                    <div
+                                        onClick={() => handleClickForAllOption(1)}
+                                        className='mr-7 relative'
+                                    >
                                         {/* background options */}
                                         <TooltipItem position="bottom" tooltipsText="Background options">
                                             <Icon icon="tabler:color-filter" color='#4a5568' height={18} />
                                         </TooltipItem>
-                                        {bgVisible ? (<BackgroundOptions />) : null}
+                                        {bgVisible ? (
+                                            <div id='BgOptionForCreateNote'>
+                                                <BackgroundOptions />
+                                            </div>
+                                        ) : null}
 
                                     </div>
 
-                                    <div className='mr-7'>
+                                    <div className='mr-7 relative'>
                                         <TooltipItem position="bottom" tooltipsText="Add image">
                                             <Icon icon="fluent:image-24-regular" color='#4a5568' height={18} />
                                         </TooltipItem>
+                                        <AddImg/>
                                     </div>
 
                                     <div className='mr-7'>
@@ -129,10 +229,17 @@ function CreateNotes(props) {
                                         </TooltipItem>
                                     </div>
 
-                                    <div className='mr-7'>
+                                    <div className='mr-7'
+                                        onClick={() => handleClickForAllOption(2)}
+                                    >
                                         <TooltipItem position="bottom" tooltipsText="More">
                                             <Icon icon="icon-park-outline:more-four" color='#4a5568' height={18} />
                                         </TooltipItem>
+                                        {moreOption ?
+                                            <div id='MoreOptionForCreateNote'>
+                                                <MoreOption for1={'createNote'} noteID={null} />
+                                            </div>
+                                            : null}
                                     </div>
 
                                     <div className=' w-[100%] flex  pb-1 justify-end'>

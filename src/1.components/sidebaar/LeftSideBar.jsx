@@ -5,7 +5,7 @@ function LeftSideBar() {
   return (
     <div className='flex items-start transition-all fixed hover:shadow-lg flex-col hover:w-60 overflow-hidden w-16 h-screen  pl-2 left-0 top-14 bg-white'>
 
-      <div className=' flex overflow-hidden rounded-full p-3  mt-4 hoverStyle1'>
+      <div className=' flex overflow-hidden rounded-full p-3  mt-4  hoverStyle1'>
       <Icon icon="solar:notes-minimalistic-line-duotone"  color='#4a5568' width={28} />
         <p className=' text-gray-800 mx-5'>Notes</p>
       </div>

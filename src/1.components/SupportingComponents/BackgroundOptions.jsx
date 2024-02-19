@@ -107,7 +107,8 @@ function BackgroundOptions() {
     return (
         <div
 
-            className={`bg-white border rounded-2xl shadow-md z-40  absolute  w-fit  -left-[90%] transition-all `}
+            className={`bg-white border rounded-2xl shadow-md z-40  absolute  w-fit  
+            -left-[800%] transition-all `}
         >
             {/* choosing color */}
             <div className='flex m-2'>
