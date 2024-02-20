@@ -98,10 +98,11 @@ function BackgroundOptions() {
                 break;
             default:
                 setImgSelection(1)
-                dispatch(chooseImg('white'))
+                dispatch(chooseColor('white'))
                 break;
         }
         dispatch(colorForNote(idForNote))
+        console.log(idForNote);
     }
 
     return (
